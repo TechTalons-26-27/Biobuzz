@@ -175,7 +175,7 @@ public class autoPath3 extends LinearOpMode {
 
         waitForStart();
         //We schedule all our commands when we start the OpMode
-       // schedule(autoRoutine());
+        schedule(autoRoutine());
         while (opModeIsActive()) {
             //Update the follower and execute the scheduler every loop
             follower.update();
