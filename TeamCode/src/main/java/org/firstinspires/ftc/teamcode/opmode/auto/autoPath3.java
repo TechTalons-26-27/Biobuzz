@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.autoPaths; // make sure this aligns with class location
+package org.firstinspires.ftc.teamcode.opmode.auto; // make sure this aligns with class location
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
@@ -14,7 +14,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import static com.pedropathing.ivy.Scheduler.*;
 import static com.pedropathing.ivy.pedro.PedroCommands.*;
 import static com.pedropathing.ivy.groups.Groups.*;
-import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
 import org.firstinspires.ftc.teamcode.config.pedropathing.Constants;
 

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.subsystems.outtake;
+package org.firstinspires.ftc.teamcode.config.subsystems.outtake;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;

@@ -11,14 +11,14 @@ public class Limelight {
     private Limelight3A limelight3A;
     private Telemetry telemetry;
 
-    public void init(HardwareMap hardwareMap, Telemetry telemetry) {
+    public void init(HardwareMap hardwareMap, Telemetry telemetry, int pipeline) {
         this.telemetry = telemetry;
 
         telemetry.setMsTransmissionInterval(16);
 
         limelight3A = hardwareMap.get(Limelight3A.class, "limelight");
         limelight3A.setPollRateHz(100);
-        limelight3A.pipelineSwitch(0);
+        limelight3A.pipelineSwitch(pipeline);
         limelight3A.start();
     }
 
