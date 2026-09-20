@@ -1,193 +1,129 @@
-package org.firstinspires.ftc.teamcode.opmode.auto; // make sure this aligns with class location
+package org.firstinspires.ftc.teamcode.opmode.auto;
 
+import static com.pedropathing.api.Paths.*;
+
+import com.pedropathing.api.PoseFactory;
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierCurve;
-import com.pedropathing.geometry.BezierLine;
-import com.pedropathing.geometry.Pose;
+import com.pedropathing.math.Pose;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.Scheduler;
-import com.pedropathing.paths.PathChain;
+import static com.pedropathing.ivy.Scheduler.schedule;
+import static com.pedropathing.ivy.groups.Groups.sequential;
+import static com.pedropathing.ivy.pedro.PedroCommands.follow;
+
+import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-
-import static com.pedropathing.ivy.Scheduler.*;
-import static com.pedropathing.ivy.pedro.PedroCommands.*;
-import static com.pedropathing.ivy.groups.Groups.*;
 
 import org.firstinspires.ftc.teamcode.config.pedropathing.Constants;
 
-@Autonomous(name = "3rd BioBuzz Auto Path ", group = "Examples")
+import com.pedropathing.ivy.Command;
+
+import static com.pedropathing.ivy.groups.Groups.sequential;
+import static com.pedropathing.ivy.pedro.PedroCommands.follow;
+
+@Autonomous(name = "AutoPath", group = "Autonomous")
 public class autoPath3 extends LinearOpMode {
 
     private Follower follower;
 
-    //defining our PathChains
-    private PathChain mainPath1, mainPath2, mainPath3, mainPath4, mainPath5, mainPath6, mainPath7;
+    private final PoseFactory poseFactory = PoseFactory.degrees();
 
-    private DcMotor intake;
-    private DcMotor outtake;
+    private final Pose start = poseFactory.of(58.2505, 8.2813, 90);
+    private final Pose path1 = poseFactory.of(58.2505, 32.3429, 90);
+    private final Pose point2 = poseFactory.of(41.7187, 25.7008, -102.21);
+    private final Pose point2Control1 = poseFactory.of(57.1481, 45.8688, 0);
+    private final Pose point2Control2 = poseFactory.of(43.5219, 34.5527, 0);
+    private final Pose point3 = poseFactory.of(8.5527, 8.8917, 179.6949);
+    private final Pose point3Control1 = poseFactory.of(38.3678, 8.6471, 0);
+    private final Pose point4Start = poseFactory.of(8.5527, 8.8917, -178);
+    private final Pose point4 = poseFactory.of(20.4026, 14.2445, 90);
+    private final Pose point5 = poseFactory.of(11.1133, 105.5626, 175.9548);
+    private final Pose point5Control1 = poseFactory.of(20.2674, 35.6511, 0);
+    private final Pose point5Control2 = poseFactory.of(30.6083, 104.8867, 0);
+    private final Pose point6Start = poseFactory.of(11.1133, 105.5626, 180);
+    private final Pose point6 = poseFactory.of(58.0308, 109.8559, -90);
+    private final Pose point7 = poseFactory.of(11.7724, 109.4702, -90);
 
-    double power = 0;
-    public void buildPaths() {
-
-        mainPath1 = follower.pathBuilder()
-                .addPath(
-                        new BezierLine(
-                                new Pose(58.2505, 8.000),
-                                new Pose(58.2505, 32.3429)
-                        )
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(90))
-                .build();
-
-        mainPath2 = follower.pathBuilder()
-                .addPath(
-                        new BezierCurve(
-                                new Pose(58.2505, 32.3429),
-                                new Pose(54.8976, 46.1501),
-                                new Pose(45.3757, 25.4195)
-                        )
-                )
-                .setTangentHeadingInterpolation()
-                .build();
-
-        mainPath3 = follower.pathBuilder()
-                .addPath(
-                        new BezierCurve(
-                                new Pose(45.3757, 25.4195),
-                                new Pose(38.3678, 8.6471),
-                                new Pose(7.9901, 8.329)
-                        )
-                )
-                .setTangentHeadingInterpolation()
-                .build();
-
-        mainPath4 = follower.pathBuilder()
-                .addPath(
-                        new BezierLine(
-                                new Pose(7.9901, 8.329),
-                                new Pose(20.9652, 8.337)
-                        )
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(-178), Math.toRadians(90))
-                .build();
-
-        mainPath5 = follower.pathBuilder()
-                .addPath(
-                        new BezierCurve(
-                                new Pose(20.9652, 8.337),
-                                new Pose(20.2674, 35.6511),
-                                new Pose(30.6083, 104.8867),
-                                new Pose(11.1133, 105.5626)
-                                )
-                )
-                .setTangentHeadingInterpolation()
-                .build();
-
-        mainPath5 = follower.pathBuilder()
-                .addPath(
-                        new BezierLine(
-                                new Pose(11.1133, 105.5626),
-                                new Pose(58.0308, 109.8559)
-                        )
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(-90))
-                .build();
-
-        mainPath5 = follower.pathBuilder()
-                .addPath(
-                        new BezierLine(
-                                new Pose(58.0308, 109.8559),
-                                new Pose(11.7724, 109.4702)
-                        )
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
-                .build();
-    }
-    private Command intakeIn;
-    private Command outtakeOut;
-
+    // Autonomous routine
     public Command autoRoutine() {
         return sequential(
-                deadline(
-                        sequential(
-                                follow(follower, mainPath1,  true)
-                        ),
-                        outtakeOut
-
-                ),
-                deadline(
-                        sequential(
-                                follow(follower, mainPath2),
-                                follow(follower, mainPath3, true),
-                                follow(follower, mainPath4, true),
-                                follow(follower, mainPath5, true)
-
-
-                        ),
-                        intakeIn
-                ),
-                deadline(
-                        sequential(
-                                follow(follower, mainPath6),
-                                follow(follower, mainPath7,  true)
-
-                        ),
-                        outtakeOut
-
-                )
-
+                follow(follower, path1()),
+                follow(follower, path2()),
+                follow(follower, path3()),
+                follow(follower, path4()),
+                follow(follower, path5()),
+                follow(follower, path6()),
+                follow(follower, path7())
         );
-
     }
-
-
 
     @Override
     public void runOpMode() {
-        //These will run when the OpMode is initiated
-
         Scheduler.reset();
-        follower = Constants.createFollower(hardwareMap);
-        buildPaths();
-        follower.setStartingPose(new Pose(58.2505, 8.2813, Math.toRadians(90)));
-        intake = hardwareMap.get(DcMotor.class, "intake");
-        intake.setDirection(DcMotor.Direction.FORWARD);
-
-        outtake = hardwareMap.get(DcMotor.class, "outtake");
-        outtake.setDirection(DcMotor.Direction.FORWARD);
-
-        intakeIn = Command.build()
-                .setExecute(() -> intake.setPower(0.7))
-                .setDone(() -> intake.getCurrentPosition() >1000)
-                .setEnd(endCondition -> intake.setPower(0))
-                .requiring(intake);
-
-        outtakeOut = Command.build()
-                .setExecute(() -> outtake.setPower(0.7))
-                .setDone(() -> outtake.getCurrentPosition() >1000)
-                .setEnd(endCondition -> outtake.setPower(0))
-                .requiring(outtake);
-
-
+        follower = Constants.create(hardwareMap);
+        follower.setPose(start);
+        follower.update();
 
         waitForStart();
-        //We schedule all our commands when we start the OpMode
         schedule(autoRoutine());
+
         while (opModeIsActive()) {
-            //Update the follower and execute the scheduler every loop
             follower.update();
             Scheduler.execute();
 
-            // Feedback to Driver Hub for debugging
-            telemetry.addData("x", follower.getPose().getX());
-            telemetry.addData("y", follower.getPose().getY());
-            telemetry.addData("heading", follower.getPose().getHeading());
+            telemetry.addData("x", follower.pose().x());
+            telemetry.addData("y", follower.pose().y());
+            telemetry.addData("heading", follower.pose().heading());
+
+            if (follower.currentPath() != null) {
+                telemetry.addData("Current path distance remaining", follower.distanceToEndpoint());
+                telemetry.addData("Path number", follower.pathIndex());
+            }
+
             telemetry.update();
         }
     }
 
+    public Path path1() {
+        return line(start, path1).linear(start, path1);
+    }
 
+    public Path path2() {
+        return curve(
+                path1,
+                point2Control1,
+                point2Control2,
+                point2
+        );
+    }
 
+    public Path path3() {
+        return curve(
+                point2,
+                point3Control1,
+                point3
+        );
+    }
+
+    public Path path4() {
+        return line(point4Start, point4).linear(point4Start, point4);
+    }
+
+    public Path path5() {
+        return curve(
+                point4,
+                point5Control1,
+                point5Control2,
+                point5
+        );
+    }
+
+    public Path path6() {
+        return line(point6Start, point6).linear(point6Start, point6);
+    }
+
+    public Path path7() {
+        return line(point6, point7).linear(point6, point7);
+    }
 }
