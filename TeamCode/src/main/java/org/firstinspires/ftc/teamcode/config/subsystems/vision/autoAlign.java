@@ -1,16 +1,16 @@
-package org.firstinspires.ftc.teamcode.config.vision;
+package org.firstinspires.ftc.teamcode.config.subsystems.vision;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.config.subsystems.mecanum.robotOrientedDrive;
+import org.firstinspires.ftc.teamcode.config.subsystems.drive.BaseDrive;
 
 @TeleOp(name="Auto Align Test")
 public class autoAlign extends OpMode {
 
     private final Limelight limelight = new Limelight();
-    private final robotOrientedDrive drive = new robotOrientedDrive();
+    private BaseDrive drive;
 
     // --------------------------- PD Controller ---------------------------
     double kP = -0.0200;
@@ -33,7 +33,7 @@ public class autoAlign extends OpMode {
     @Override
     public void init() {
         limelight.init(hardwareMap, telemetry,0);
-        drive.init(hardwareMap);
+        drive = new BaseDrive(hardwareMap);
 
 
         telemetry.addLine("Initialized");

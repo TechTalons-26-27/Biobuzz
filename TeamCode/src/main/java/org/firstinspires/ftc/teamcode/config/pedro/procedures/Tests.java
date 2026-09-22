@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.config.pedropathing.procedures;
+package org.firstinspires.ftc.teamcode.config.pedro.procedures;
 
 import static com.pedropathing.api.Paths.curve;
 import static com.pedropathing.api.Paths.line;

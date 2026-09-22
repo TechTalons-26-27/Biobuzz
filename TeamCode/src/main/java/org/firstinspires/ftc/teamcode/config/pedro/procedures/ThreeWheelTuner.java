@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.config.pedropathing.procedures;
+package org.firstinspires.ftc.teamcode.config.pedro.procedures;
 
 import com.pedropathing.math.Pose;
 import com.pedropathing.revhub.localizers.Encoder;

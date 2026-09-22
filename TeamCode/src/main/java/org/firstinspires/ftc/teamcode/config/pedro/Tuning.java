@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.config.pedropathing;
+package org.firstinspires.ftc.teamcode.config.pedro;
 
 import com.pedropathing.algorithm.Foresight;
 import com.pedropathing.revhub.drivetrains.Mecanum;
@@ -6,10 +6,10 @@ import com.pedropathing.revhub.localizers.PinpointLocalizer;
 import com.pedropathing.tuning.autotune.Tuner;
 import com.pedropathing.tuning.autotune.Procedure;
 
-import org.firstinspires.ftc.teamcode.config.pedropathing.procedures.MecanumTuner;
-import org.firstinspires.ftc.teamcode.config.pedropathing.procedures.PinpointTuner;
-import org.firstinspires.ftc.teamcode.config.pedropathing.procedures.ForesightTuner;
-import org.firstinspires.ftc.teamcode.config.pedropathing.procedures.Tests;
+import org.firstinspires.ftc.teamcode.config.pedro.procedures.MecanumTuner;
+import org.firstinspires.ftc.teamcode.config.pedro.procedures.PinpointTuner;
+import org.firstinspires.ftc.teamcode.config.pedro.procedures.ForesightTuner;
+import org.firstinspires.ftc.teamcode.config.pedro.procedures.Tests;
 public class Tuning {
     // Tuners go here
     @Tuner
