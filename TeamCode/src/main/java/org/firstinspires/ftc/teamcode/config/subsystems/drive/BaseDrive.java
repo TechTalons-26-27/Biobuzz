@@ -1,13 +1,13 @@
-package org.firstinspires.ftc.teamcode.config.subsystems.mecanum;
+package org.firstinspires.ftc.teamcode.config.subsystems.drive;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class robotOrientedDrive {
+public class BaseDrive {
 
     private DcMotor frontLeft, frontRight, backLeft, backRight;
 
-    public void init(HardwareMap hardwareMap) {
+    public BaseDrive(HardwareMap hardwareMap) {
         frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
         frontRight = hardwareMap.get(DcMotor.class, "frontRight");
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
@@ -22,11 +22,11 @@ public class robotOrientedDrive {
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public void drive(double forward, double strafe, double rotate) {
-        double frontLeftPower = forward + strafe + rotate;
-        double frontRightPower = forward - strafe - rotate;
-        double backLeftPower = forward - strafe + rotate;
-        double backRightPower = forward + strafe - rotate;
+    public void drive(double forward, double lateral, double rotate) {
+        double frontLeftPower = forward + lateral + rotate;
+        double frontRightPower = forward - lateral - rotate;
+        double backLeftPower = forward - lateral + rotate;
+        double backRightPower = forward + lateral - rotate;
 
         double maxPower = 1; // change to fully slow down robot
         double maxSpeed = 1; //  change for outreach events

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.config.vision;
+package org.firstinspires.ftc.teamcode.config.subsystems.vision;
 
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
