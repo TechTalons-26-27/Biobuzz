@@ -4,6 +4,7 @@ import static com.pedropathing.api.Paths.*;
 
 import com.pedropathing.api.PoseFactory;
 import com.pedropathing.follower.Follower;
+import com.pedropathing.ivy.pedro.PedroCommands;
 import com.pedropathing.math.Pose;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.Scheduler;
@@ -17,6 +18,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.config.pedropathing.Constants;
 
+
+import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 
 @Autonomous(name = "AutoPath", group = "Autonomous")
@@ -45,11 +48,11 @@ public class autoPath3 extends LinearOpMode {
     // Autonomous routine
     public Command autoRoutine() {
         return sequential(
-                follow(follower, path1()),
-                follow(follower, path2()),
-                follow(follower, path3()),
-                follow(follower, path4()),
-                follow(follower, path5()),
+                PedroCommands.follow(follower, path1()),
+                PedroCommands.follow(follower, path2()),
+                PedroCommands.follow(follower, path3()),
+                PedroCommands.follow(follower, path4()),
+                PedroCommands.follow(follower, path5()),
                 follow(follower, path6()),
                 follow(follower, path7())
         );
