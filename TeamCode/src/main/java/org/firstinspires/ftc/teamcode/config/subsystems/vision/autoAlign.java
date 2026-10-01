@@ -93,7 +93,7 @@ public class autoAlign extends OpMode {
         }
 
         // drive motors
-        drive.drive(forward,strafe,rotate);
+        drive.loop(forward,strafe,rotate);
 
         //update P and D on the fly
         // 'B' button cycles through different step sizes for tuning precision

@@ -13,8 +13,8 @@ public class BaseDrive {
         backLeft = hardwareMap.get(DcMotor.class, "backLeft");
         backRight = hardwareMap.get(DcMotor.class, "backRight");
 
-        frontLeft.setDirection(DcMotor.Direction.REVERSE);
-        backLeft.setDirection(DcMotor.Direction.REVERSE);
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
+        backRight.setDirection(DcMotor.Direction.REVERSE);
 
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -22,7 +22,7 @@ public class BaseDrive {
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public void drive(double forward, double lateral, double rotate) {
+    public void loop(double forward, double lateral, double rotate) {
         double frontLeftPower = forward + lateral + rotate;
         double frontRightPower = forward - lateral - rotate;
         double backLeftPower = forward - lateral + rotate;
