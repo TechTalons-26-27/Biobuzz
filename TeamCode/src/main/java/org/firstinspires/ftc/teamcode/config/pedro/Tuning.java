@@ -10,7 +10,10 @@ import org.firstinspires.ftc.teamcode.config.pedro.procedures.MecanumTuner;
 import org.firstinspires.ftc.teamcode.config.pedro.procedures.PinpointTuner;
 import org.firstinspires.ftc.teamcode.config.pedro.procedures.ForesightTuner;
 import org.firstinspires.ftc.teamcode.config.pedro.procedures.Tests;
-public class Tuning {
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+@TeleOp(name = "Tuning", group = "Pedro Pathing")
+public class Tuning extends OpMode {
     // Tuners go here
     @Tuner
     public static Procedure mecanumTuner() {
@@ -32,5 +35,14 @@ public class Tuning {
     @Tuner
     public static Procedure tests() {
         return new Tests(hardwareMap -> new Mecanum(hardwareMap, Constants.drivetrainConfig), (hardwareMap -> new PinpointLocalizer(hardwareMap, Constants.localizerConfig)), () -> new Foresight(Constants.foresightConfig));
+    }
+
+
+    @Override
+    public void init() {
+    }
+
+    @Override
+    public void loop() {
     }
 }
