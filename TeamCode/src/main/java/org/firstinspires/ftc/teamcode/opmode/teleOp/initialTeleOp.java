@@ -4,15 +4,13 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.config.subsystems.drive.BaseDrive;
-import org.firstinspires.ftc.teamcode.config.subsystems.drive.MecanumDrive;
 import org.firstinspires.ftc.teamcode.config.subsystems.intake.Intake;
 import org.firstinspires.ftc.teamcode.config.subsystems.outtake.Outtake;
 
-@TeleOp(name="all these tards")
+@TeleOp(name="Drive + Intake + Outtake")
 public class initialTeleOp extends OpMode {
 
-    //TODO: USE BASEDRIVE IF NOT TUNED
-    //BaseDrive drive;
+    //PedroDrive drive;
     BaseDrive drive;
     Intake intake;
     Outtake outtake;
@@ -28,18 +26,27 @@ public class initialTeleOp extends OpMode {
 
     @Override
     public void loop() {
-        forward = gamepad1.left_stick_x;
-        lateral = -gamepad1.left_stick_y;
-        rotate = -gamepad1.right_stick_x;
+        forward = -gamepad1.left_stick_y;
+        lateral = gamepad1.left_stick_x;
+        rotate = gamepad1.right_stick_x;
 
-        drive.loop(forward, lateral, rotate);
-        //drive.loop(forward, lateral, rotate, gamepad1.bWasPressed());
+        drive.run(forward, lateral, rotate);
+        //drive.run(forward, lateral, rotate, gamepad1.bWasPressed());
 
-        if (gamepad1.rightTriggerWasPressed()) {
-            outtake.loop(gamepad1.right_trigger);
-            intake.loop(true);
+        if (gamepad1.right_trigger > 0.2) {
+            outtake.run(gamepad1.right_trigger);
+            intake.run(true);
         } else {
-            intake.loop(gamepad1.aWasPressed());
+            if (gamepad1.left_trigger > 0.2) {
+                outtake.run(gamepad1.left_trigger);
+            } else {
+                outtake.run(0);
+            }
+            intake.run(gamepad1.a);
         }
+
+        //drive.telemetry(telemetry);
+        //intake.telemetry(telemetry);
+        //outtake.telemetry(telemetry);
     }
 }

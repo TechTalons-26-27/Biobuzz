@@ -7,19 +7,19 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.config.pedro.Constants;
 
-public class MecanumDrive {
+public class PedroDrive {
     private final Follower follower;
 
     private boolean fieldOriented = false;
 
-    public MecanumDrive(HardwareMap hardwareMap) {
+    public PedroDrive(HardwareMap hardwareMap) {
         follower = Constants.create(hardwareMap);
     }
 
-    public void loop(double forward, double lateral, double rotate, boolean changeModeButton) {
+    public void run(double forward, double lateral, double rotate, boolean changeModeButton) {
         toggleFieldOriented(changeModeButton);
 
-        if (!fieldOriented) {
+        if (!fieldOriented) { // normal drive
             ManualDrive.driveOrHold(
                     follower,
                     forward,
@@ -27,7 +27,7 @@ public class MecanumDrive {
                     rotate
             );
         }
-        else {
+        else { // field oriented
             DrivePowers powers = ManualDrive.fieldCentric(
                     forward,
                     lateral,

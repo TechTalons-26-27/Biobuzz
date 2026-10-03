@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.config.subsystems.drive;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class BaseDrive {
 
     private DcMotor frontLeft, frontRight, backLeft, backRight;
@@ -22,7 +24,7 @@ public class BaseDrive {
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public void loop(double forward, double lateral, double rotate) {
+    public void run(double forward, double lateral, double rotate) {
         double frontLeftPower = forward + lateral + rotate;
         double frontRightPower = forward - lateral - rotate;
         double backLeftPower = forward - lateral + rotate;
@@ -43,4 +45,10 @@ public class BaseDrive {
 
     }
 
+    public void telemetry(Telemetry telemetry) {
+        telemetry.addData("frontLeftPower:", frontLeft.getPower());
+        telemetry.addData("frontRightPower:", frontRight.getPower());
+        telemetry.addData("backLeftPower:", backLeft.getPower());
+        telemetry.addData("backRightPower:", backRight.getPower());
+    }
 }
