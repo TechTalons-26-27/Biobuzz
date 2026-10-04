@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 @TeleOp(name = "Basic TeleOp")
-public class basicTeleOP extends LinearOpMode {
+public class basicTeleOp extends LinearOpMode {
 
     //Pedro Constants
 
