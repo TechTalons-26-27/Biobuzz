@@ -3,6 +3,9 @@ import static com.pedropathing.api.Paths.*;
 
 import com.pedropathing.api.PoseFactory;
 import com.pedropathing.follower.Follower;
+import com.pedropathing.ivy.behaviors.BlockedBehavior;
+import com.pedropathing.ivy.behaviors.ConflictBehavior;
+import com.pedropathing.ivy.behaviors.InterruptedBehavior;
 import com.pedropathing.math.Pose;
 import com.pedropathing.paths.Path;
 import com.pedropathing.ivy.Command;
@@ -12,6 +15,7 @@ import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
@@ -19,7 +23,11 @@ import org.firstinspires.ftc.teamcode.pedro.Constants;
 public class auto2 extends LinearOpMode {
 
     private Follower follower;
-
+    private DcMotor stage1;
+    private DcMotor outtake;
+    private DcMotor intake;
+    private DcMotor stage2;
+    private DcMotor finger;
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
     private final Pose start = poseFactory.of(59.3028, 132.8351, 90);
@@ -37,13 +45,19 @@ public class auto2 extends LinearOpMode {
     private final Pose point5Control1 = poseFactory.of(54.1146, 84.7831, 0);
     private final Pose point5Control2 = poseFactory.of(32.1978, 107.4382, 0);
 
-    // Autonomous routine
+    private Command runintake;
+    private Command runouttake;
+    private Command unintake;
+    private Command hold;
     public Command autoRoutine() {
         return sequential(
                 follow(follower, path1()),
+                runouttake,
                 follow(follower, path2()),
+                runintake,
                 follow(follower, path3()),
                 follow(follower, path4()),
+                runouttake,
                 follow(follower, path5())
         );
     }
@@ -55,6 +69,34 @@ public class auto2 extends LinearOpMode {
         follower.setPose(start);
         follower.update();
 
+        stage1 = hardwareMap.get(DcMotor.class, "stage1");
+        outtake = hardwareMap.get(DcMotor.class, "outtake");
+        intake = hardwareMap.get(DcMotor.class, "intake");
+        stage2 = hardwareMap.get(DcMotor.class, "stage2");
+        finger = hardwareMap.get(DcMotor.class, "finger");
+        stage1.setDirection(DcMotor.Direction.FORWARD);
+
+        runintake = Command.build()
+                .setExecute(() -> {intake.setPower(0.7); stage1.setPower(0.7); stage2.setPower(0.7);})
+                .setDone(() -> intake.getCurrentPosition() >1000)
+                .setEnd(endCondition -> {intake.setPower(0); stage1.setPower(0); stage2.setPower(0); })
+                .requiring(intake);
+
+        runouttake = Command.build()
+                .setExecute(() ->{ intake.setPower(-0.7); outtake.setPower(-0.7); stage1.setPower(-0.7); stage2.setPower(-0.7); finger.setPower(0.5);})
+                .setDone(() -> outtake.getCurrentPosition() >1000)
+                .setEnd(endCondition ->{ intake.setPower(0); outtake.setPower(0); stage1.setPower(0); stage2.setPower(0); finger.setPower(0);})
+                .requiring(outtake);
+        unintake = Command.build()
+                .setExecute(() -> {intake.setPower(-0.7); stage1.setPower(-0.7); stage2.setPower(-0.7);})
+                .setDone(() -> intake.getCurrentPosition() >1000)
+                .setEnd(endCondition -> {intake.setPower(0); stage1.setPower(0); stage2.setPower(0); })
+                .requiring(intake);
+        hold = Command.build()
+                .setExecute(() -> {intake.setPower(0.3); stage1.setPower(0.3); stage2.setPower(-0.3);})
+                .setDone(() -> intake.getCurrentPosition() >1000)
+                .setEnd(endCondition -> {intake.setPower(0); stage1.setPower(0); stage2.setPower(0); })
+                .requiring(intake);
         waitForStart();
         schedule(autoRoutine());
 
