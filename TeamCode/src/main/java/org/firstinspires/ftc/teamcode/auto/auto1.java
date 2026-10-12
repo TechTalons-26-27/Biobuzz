@@ -82,11 +82,11 @@ public class auto1 extends LinearOpMode {
                 .requiring(outtake);
         Command WarmUp = sequential(
                 instant(() -> {
-                    intake.setPower(-0.7);
-                    outtake.setPower(-0.7);
-                    stage1.setPower(-0.7);
-                    stage2.setPower(-0.7);
-                    finger.setPower(0.5);
+                    intake.setPower(-1.0);
+                    outtake.setPower(-1.0);
+                    stage1.setPower(-1.0);
+                    stage2.setPower(-1.0);
+                    finger.setPower(1.0);
                 }),
 
                 waitMs(1000),
