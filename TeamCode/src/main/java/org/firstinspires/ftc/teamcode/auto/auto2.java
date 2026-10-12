@@ -11,6 +11,8 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.Scheduler;
 import static com.pedropathing.ivy.Scheduler.schedule;
+import static com.pedropathing.ivy.commands.Commands.instant;
+import static com.pedropathing.ivy.commands.Commands.waitMs;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -87,6 +89,44 @@ public class auto2 extends LinearOpMode {
                 .setDone(() -> outtake.getCurrentPosition() >1000)
                 .setEnd(endCondition ->{ intake.setPower(0); outtake.setPower(0); stage1.setPower(0); stage2.setPower(0); finger.setPower(0);})
                 .requiring(outtake);
+        Command WarmUp = sequential(
+                instant(() -> {
+                    intake.setPower(-0.7);
+                    outtake.setPower(-0.7);
+                    stage1.setPower(-0.7);
+                    stage2.setPower(-0.7);
+                    finger.setPower(0.5);
+                }),
+
+                waitMs(1000),
+
+                instant(() -> {
+                    intake.setPower(0);
+                    outtake.setPower(0);
+                    stage1.setPower(0);
+                    stage2.setPower(0);
+                    finger.setPower(0);
+                })
+        );
+        Command timedActionSequence = sequential(
+                instant(() -> {
+                    intake.setPower(-0.7);
+                    outtake.setPower(-0.7);
+                    stage1.setPower(-0.7);
+                    stage2.setPower(-0.7);
+                    finger.setPower(0.5);
+                }),
+
+                waitMs(1000),
+
+                instant(() -> {
+                    intake.setPower(0);
+                    outtake.setPower(0);
+                    stage1.setPower(0);
+                    stage2.setPower(0);
+                    finger.setPower(0);
+                })
+        );
         unintake = Command.build()
                 .setExecute(() -> {intake.setPower(-0.7); stage1.setPower(-0.7); stage2.setPower(-0.7);})
                 .setDone(() -> intake.getCurrentPosition() >1000)
@@ -97,6 +137,7 @@ public class auto2 extends LinearOpMode {
                 .setDone(() -> intake.getCurrentPosition() >1000)
                 .setEnd(endCondition -> {intake.setPower(0); stage1.setPower(0); stage2.setPower(0); })
                 .requiring(intake);
+
         waitForStart();
         schedule(autoRoutine());
 

@@ -12,6 +12,8 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.Scheduler;
 import static com.pedropathing.ivy.Scheduler.schedule;
+import static com.pedropathing.ivy.commands.Commands.instant;
+import static com.pedropathing.ivy.commands.Commands.waitMs;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -80,11 +82,11 @@ public class auto1 extends LinearOpMode {
                 .requiring(outtake);
         Command WarmUp = sequential(
                 instant(() -> {
-                    intake.setPower(-1.0);
-                    outtake.setPower(-1.0);
-                    stage1.setPower(-1.0);
-                    stage2.setPower(-1.0);
-                    finger.setPower(1.0);
+                    intake.setPower(-0.7);
+                    outtake.setPower(-0.7);
+                    stage1.setPower(-0.7);
+                    stage2.setPower(-0.7);
+                    finger.setPower(0.5);
                 }),
 
                 waitMs(1000),
