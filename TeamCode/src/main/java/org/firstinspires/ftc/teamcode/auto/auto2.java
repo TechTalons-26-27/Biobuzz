@@ -51,15 +51,17 @@ public class auto2 extends LinearOpMode {
     private Command runouttake;
     private Command unintake;
     private Command hold;
+    private Command timedActionSequence;
+    private Command WarmUp;
     public Command autoRoutine() {
         return sequential(
                 follow(follower, path1()),
-                runouttake,
+                timedActionSequence,
                 follow(follower, path2()),
                 runintake,
                 follow(follower, path3()),
                 follow(follower, path4()),
-                runouttake,
+                timedActionSequence,
                 follow(follower, path5())
         );
     }
@@ -89,7 +91,7 @@ public class auto2 extends LinearOpMode {
                 .setDone(() -> outtake.getCurrentPosition() >1000)
                 .setEnd(endCondition ->{ intake.setPower(0); outtake.setPower(0); stage1.setPower(0); stage2.setPower(0); finger.setPower(0);})
                 .requiring(outtake);
-        Command WarmUp = sequential(
+        WarmUp = sequential(
                 instant(() -> {
                     intake.setPower(-1.0);
                     outtake.setPower(-1.0);
@@ -108,7 +110,7 @@ public class auto2 extends LinearOpMode {
                     finger.setPower(0);
                 })
         );
-        Command timedActionSequence = sequential(
+        timedActionSequence = sequential(
                 instant(() -> {
                     intake.setPower(-0.7);
                     outtake.setPower(-0.7);
