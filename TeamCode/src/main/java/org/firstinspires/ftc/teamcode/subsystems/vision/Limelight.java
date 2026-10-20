@@ -11,7 +11,7 @@ public class Limelight {
     private Limelight3A limelight3A;
     private Telemetry telemetry;
 
-    public void init(HardwareMap hardwareMap, Telemetry telemetry, int pipeline) {
+    public Limelight(HardwareMap hardwareMap, Telemetry telemetry, int pipeline) {
         this.telemetry = telemetry;
 
         telemetry.setMsTransmissionInterval(16);

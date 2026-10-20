@@ -5,43 +5,39 @@ import com.pedropathing.math.Vector2D;
 
 public class KalmanFilter {
 
-    private double estimateXVariance;
+    private double xVariance;
 
-    private double estimateYVariance;
+    private double yVariance;
 
-    private Pose estimateState;
+    private Pose filterPose;
 
-    public KalmanFilter(Pose startPose, double initialXVar, double initialYVar) {
+    public KalmanFilter(Pose startPose, double xVariance, double yVariance) {
+        this.filterPose = startPose;
 
-        this.estimateState = startPose;
+        this.xVariance = xVariance;
 
-        this.estimateXVariance = initialXVar;
-
-        this.estimateYVariance = initialYVar;
+        this.yVariance = yVariance;
 
     }
-
 
     public void predict(Vector2D velocity, double dt) {
 
         // Grow uncertainty over time based on velocity
 
-        estimateXVariance += dt * dt * Math.abs(velocity.x());
+        xVariance += dt * dt * Math.abs(velocity.x());
 
-        estimateYVariance += dt * dt * Math.abs(velocity.y());
+        yVariance += dt * dt * Math.abs(velocity.y());
 
 
 
         // Advance position prediction
 
-        estimateState = new Pose(
+        filterPose = new Pose(
+            filterPose.x() + velocity.x() * dt,
 
-                estimateState.x() + velocity.x() * dt,
+            filterPose.y() + velocity.y() * dt,
 
-                estimateState.y() + velocity.y() * dt,
-
-                estimateState.heading()
-
+            filterPose.heading()
         );
 
     }
@@ -52,34 +48,32 @@ public class KalmanFilter {
 
         // Calculate Kalman Gain for X and Y
 
-        double kalmanGainX = estimateXVariance / (estimateXVariance + measurementVariance);
+        double kalmanGainX = xVariance / (xVariance + measurementVariance);
 
-        double kalmanGainY = estimateYVariance / (estimateYVariance + measurementVariance);
+        double kalmanGainY = yVariance / (yVariance + measurementVariance);
 
 
 
         // Update variances
 
-        estimateXVariance = (1 - kalmanGainX) * estimateXVariance;
+        xVariance = (1 - kalmanGainX) * xVariance;
 
-        estimateYVariance = (1 - kalmanGainY) * estimateYVariance;
+        yVariance = (1 - kalmanGainY) * yVariance;
 
 
 
         // Blend prediction with measurement
 
-        double correctedX = estimateState.x() + kalmanGainX * (measurement.x() - estimateState.x());
+        double correctedX = filterPose.x() + kalmanGainX * (measurement.x() - filterPose.x());
 
-        double correctedY = estimateState.y() + kalmanGainY * (measurement.y() - estimateState.y());
+        double correctedY = filterPose.y() + kalmanGainY * (measurement.y() - filterPose.y());
 
-
-
-        estimateState = new Pose(correctedX, correctedY, heading);
+        filterPose = new Pose(correctedX, correctedY, heading);
 
     }
 
-    public Pose getState() {
-        return estimateState;
+    public Pose getPose() {
+        return filterPose;
     }
 
 }

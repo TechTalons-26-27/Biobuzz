@@ -3,25 +3,18 @@ package org.firstinspires.ftc.teamcode.teleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.subsystems.drive.BaseDrive;
-import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake;
+import org.firstinspires.ftc.teamcode.Robot;
+import org.firstinspires.ftc.teamcode.util.PoseStorage;
 
 @TeleOp(name="Drive + Intake + Outtake")
 public class initialTeleOp extends OpMode {
 
-    //PedroDrive drive;
-    BaseDrive drive;
-    Intake intake;
-    Outtake outtake;
+    Robot robot;
     double forward, lateral, rotate;
 
     @Override
     public void init() {
-        //drive = new BaseDrive(hardwareMap);
-        drive = new BaseDrive(hardwareMap);
-        intake = new Intake(hardwareMap);
-        outtake = new Outtake(hardwareMap);
+        robot.initSubsystems(hardwareMap, telemetry, PoseStorage.currentPose);
     }
 
     @Override
@@ -30,23 +23,18 @@ public class initialTeleOp extends OpMode {
         lateral = gamepad1.left_stick_x;
         rotate = gamepad1.right_stick_x;
 
-        drive.run(forward, lateral, rotate);
-        //drive.run(forward, lateral, rotate, gamepad1.bWasPressed());
+        robot.drive(forward, lateral, rotate);
 
         if (gamepad1.right_trigger > 0.2) {
-            outtake.run(gamepad1.right_trigger);
-            intake.run(true);
+            robot.outtake(gamepad1.right_trigger);
+            robot.intake(true);
         } else {
             if (gamepad1.left_trigger > 0.2) {
-                outtake.run(gamepad1.left_trigger);
+                robot.outtake(gamepad1.left_trigger);
             } else {
-                outtake.run(0);
+                robot.outtake(0);
             }
-            intake.run(gamepad1.a);
+            robot.intake(gamepad1.a);
         }
-
-        //drive.telemetry(telemetry);
-        //intake.telemetry(telemetry);
-        //outtake.telemetry(telemetry);
     }
 }

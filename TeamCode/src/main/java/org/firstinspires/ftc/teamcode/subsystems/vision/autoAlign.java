@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.subsystems.drive.BaseDrive;
 @TeleOp(name="Auto Align Test")
 public class autoAlign extends OpMode {
 
-    private final Limelight limelight = new Limelight();
+    private Limelight limelight;
     private BaseDrive drive;
 
     // --------------------------- PD Controller ---------------------------
@@ -32,7 +32,7 @@ public class autoAlign extends OpMode {
 
     @Override
     public void init() {
-        limelight.init(hardwareMap, telemetry,0);
+        limelight = new Limelight(hardwareMap, telemetry,0);
         drive = new BaseDrive(hardwareMap);
 
 
