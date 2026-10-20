@@ -1,149 +1,150 @@
+
 package org.firstinspires.ftc.teamcode.teleOp;
 
 import com.pedropathing.math.Pose;
-import com.pedropathing.math.Vector2D;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.subsystems.drive.BaseDrive;
+import org.firstinspires.ftc.teamcode.subsystems.drive.Drive;
 import org.firstinspires.ftc.teamcode.subsystems.vision.Limelight;
-import org.firstinspires.ftc.teamcode.util.KalmanFilter; // Adjust if named KalmanFilter
-import org.firstinspires.ftc.teamcode.util.PoseStorage;
+import org.firstinspires.ftc.teamcode.subsystems.Turret;
+import org.firstinspires.ftc.teamcode.util.RobotLocalizer;
 
-@TeleOp(name="Auto Align Test with Kalman")
+@TeleOp(name = "Turret Kalman Tracking")
 public class turretTeleOp extends OpMode {
 
+    private Drive drive;
     private Limelight limelight;
-    private BaseDrive drive;
-    private KalmanFilter kalmanFilter;
+    private RobotLocalizer localizer;
+    private Turret turret;
 
-    // --------------------------- PD Controller ---------------------------
-    double kP = -0.0200;
-    double error = 0;
-    double lastError = 0;
-    double angleTolerance = 0.2;
-    double kD = -0.0005;
-    double curTime = 0;
-    double lastTime = 0;
+    // REPLACE with actual field starting pose.
+    private static final Pose START_POSE =
+            new Pose(0, 0, 0);
 
-    // --------------------------- Drive ---------------------------
-    double forward, strafe, rotate;
+    // REPLACE with actual goal coordinates in inches.
+    private static final double GOAL_X = 0;
+    private static final double GOAL_Y = 0;
 
-    // --------------------------- controller based PD tuning ---------------------------
-    double[] stepSizes = {0.1, 0.01, 0.001, 0.0001};
-    int stepIndex = 2;
+    // Enable only after completing calibration.
+    private static final boolean ENABLE_TURRET = false;
+    private static final boolean ENABLE_VISION = false;
 
     @Override
     public void init() {
-        limelight = new Limelight(hardwareMap, telemetry, 0);
-        drive = new BaseDrive(hardwareMap);
 
-        // Initialize Kalman Filter with a starting Pose (e.g., 0,0,0) and variances
-        kalmanFilter = new KalmanFilter(new Pose(0, 0, 0), 1.0, 1.0);
+        drive = new Drive(hardwareMap, START_POSE);
 
-        telemetry.addLine("Initialized with Kalman Filter");
+        limelight = new Limelight(
+                hardwareMap,
+                telemetry,
+                0
+        );
+
+        localizer = new RobotLocalizer(
+                drive,
+                limelight,
+                START_POSE
+        );
+
+        localizer.setVisionFusionEnabled(ENABLE_VISION);
+
+        turret = new Turret(hardwareMap);
+
+        telemetry.addLine("Turret Tracking Initialized");
+        telemetry.addLine("Verify calibration before enabling.");
         telemetry.update();
-    }
-
-    @Override
-    public void start() {
-        resetRuntime();
-        curTime = getRuntime();
-        lastTime = curTime;
     }
 
     @Override
     public void loop() {
-        // Calculate delta time (dt) for prediction updates
-        curTime = getRuntime();
-        double dT = curTime - lastTime;
-        lastTime = curTime;
 
-        // --------------------------- get mecanum drive inputs ---------------------------
-        forward = gamepad1.left_stick_y;
-        strafe = -gamepad1.left_stick_x;
-        rotate = -gamepad1.right_stick_x;
+        // ---------------- DRIVER CONTROL ----------------
 
-        // 1. PREDICT: Update Kalman filter model using robot velocity (estimated from sticks or odometry)
-        Vector2D estimatedVelocity = Vector2D.cartesian(forward * 10.0, strafe * 10.0); //Scale factor based on robot speed
-        kalmanFilter.predict(estimatedVelocity, dT);
+        double forward = -gamepad1.left_stick_y;
+        double strafe = gamepad1.left_stick_x;
+        double rotate = gamepad1.right_stick_x;
 
-        // --------------------------- get limelight input ---------------------------
-        double Tx = limelight.getTx();
-        double Ty = limelight.getTy();
-
-        // 2. UPDATE: If Limelight sees a target, feed it into the Kalman filter as a measurement
-        if (Tx != -999 && Ty != -999) {
-            // Construct a measurement pose using Limelight data (mapping Tx/Ty to field coordinates or offsets)
-            Pose measurementPose = new Pose(Tx, Ty, 0);
-            double measurementVariance = 0.5; // Trust level of the vision measurement
-
-            kalmanFilter.update(measurementPose, measurementVariance, 0);
-        }
-
-        // Fetch filtered pose state from the Kalman Filter
-        Pose filteredPose = kalmanFilter.getPose();
-        PoseStorage.currentPose = filteredPose; // Keep global PoseStorage in sync
-
-        // --------------------------- auto align rotation logic ---------------------------
-        if (gamepad1.left_trigger > 0.3) {
-            // Use filtered X position or Tx combined with filtered state for aiming error
-            error = Tx; // Alternatively: Tx + filteredPose.x() depending on coordinate space setup
-
-            if (Math.abs(error) < angleTolerance) {
-                rotate = 0;
-            } else {
-                double pTerm = error * kP;
-                double dTerm = 0;
-
-                if (dT != 0) {
-                    dTerm = ((error - lastError) / dT) * kD;
-                }
-
-                rotate = Range.clip(pTerm + dTerm, -0.4, 0.4);
-                lastError = error;
-            }
-        } else {
-            lastError = 0;
-        }
-
-        // drive motors
+        // Driver controls drivetrain independently.
         drive.run(forward, strafe, rotate);
 
-        //update P and D on the fly
-        if (gamepad1.bWasPressed()) {
-            stepIndex = (stepIndex + 1) % stepSizes.length;
-        }
-        if (gamepad1.dpadLeftWasPressed()) {
-            kP -= stepSizes[stepIndex];
-        }
-        if (gamepad1.dpadRightWasPressed()) {
-            kP += stepSizes[stepIndex];
-        }
-        if (gamepad1.dpadUpWasPressed()) {
-            kD += stepSizes[stepIndex];
-        }
-        if (gamepad1.dpadDownWasPressed()) {
-            kD -= stepSizes[stepIndex];
+        // ---------------- SENSOR FUSION ----------------
+
+        // Predict using odometry movement.
+        // Correct using new vision measurements if enabled.
+        localizer.update();
+
+        Pose fusedPose = localizer.getPose();
+        Pose odomPose = localizer.getOdometryPose();
+
+        // ---------------- TURRET TRACKING ----------------
+
+        if (ENABLE_TURRET) {
+            turret.aimAt(
+                    GOAL_X,
+                    GOAL_Y,
+                    fusedPose
+            );
         }
 
-        // --------------------------- telemetry ---------------------------
-        if (Tx != -999) {
-            if (gamepad1.left_trigger > 0.3) {
-                telemetry.addLine("AUTO ALIGN (Kalman Fusion Active)");
-            }
-            telemetry.addData("Error", error);
-        } else {
-            telemetry.addLine("MANUAL Rotate Mode");
+        // ---------------- TELEMETRY ----------------
+
+        telemetry.addLine("KALMAN LOCALIZATION");
+
+        telemetry.addData(
+                "Odometry X", "%.2f", odomPose.x()
+        );
+
+        telemetry.addData(
+                "Odometry Y", "%.2f", odomPose.y()
+        );
+
+        telemetry.addData(
+                "Kalman X", "%.2f", fusedPose.x()
+        );
+
+        telemetry.addData(
+                "Kalman Y", "%.2f", fusedPose.y()
+        );
+
+        telemetry.addData(
+                "Heading", "%.2f",
+                Math.toDegrees(fusedPose.heading())
+        );
+
+        telemetry.addData(
+                "Vision Corrected",
+                localizer.wasVisionUpdated()
+        );
+
+        telemetry.addLine("-------------------------");
+
+        telemetry.addData(
+                "Turret Enabled", ENABLE_TURRET
+        );
+
+        telemetry.addData(
+                "Vision Enabled", ENABLE_VISION
+        );
+
+        if (ENABLE_TURRET) {
+            telemetry.addData(
+                    "Target Angle", "%.2f",
+                    turret.getTargetAngleDegrees()
+            );
+
+            telemetry.addData(
+                    "Target Reachable",
+                    turret.isTargetReachable()
+            );
         }
-        telemetry.addData("Tx", Tx);
-        telemetry.addData("Filtered X", "%.2f", filteredPose.x());
-        telemetry.addData("Filtered Y", "%.2f", filteredPose.y());
-        telemetry.addLine("-----------------------------");
-        telemetry.addData("Tuning P", "%.4f (D-Pad L/R)", kP);
-        telemetry.addData("Tuning D", "%.4f (D-Pad U/D)", kD);
-        telemetry.addData("Step Sizes", "%.4f (B Button)", stepSizes[stepIndex]);
+
         telemetry.update();
+    }
+
+    @Override
+    public void stop() {
+        drive.stop();
+        limelight.stop();
     }
 }

@@ -20,26 +20,26 @@ public class KalmanFilter {
 
     }
 
-    public void predict(Vector2D velocity, double dt) {
+    public void predict(Vector2D velocity, double dt, double heading) {
 
         // Grow uncertainty over time based on velocity
 
-        xVariance += dt * dt * Math.abs(velocity.x());
+        double processNoise = 0.02;
 
-        yVariance += dt * dt * Math.abs(velocity.y());
+        xVariance += processNoise * Math.abs(velocity.x() * dt);
+        yVariance += processNoise * Math.abs(velocity.y() * dt);
 
 
 
         // Advance position prediction
 
         filterPose = new Pose(
-            filterPose.x() + velocity.x() * dt,
+                filterPose.x() + velocity.x() * dt,
 
-            filterPose.y() + velocity.y() * dt,
+                filterPose.y() + velocity.y() * dt,
 
-            filterPose.heading()
+                heading
         );
-
     }
 
 
