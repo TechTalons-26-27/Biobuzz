@@ -13,19 +13,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 public class Limelight {
 
     private final Limelight3A limelight3A;
-    private final Telemetry telemetry;
 
     private long lastTimestamp = Long.MIN_VALUE;
 
-    public Limelight(
-            HardwareMap hardwareMap,
-            Telemetry telemetry,
-            int pipeline) {
+    public Limelight(HardwareMap hardwareMap, int pipeline) {
 
-        this.telemetry = telemetry;
-
-        limelight3A =
-                hardwareMap.get(Limelight3A.class, "limelight");
+        limelight3A = hardwareMap.get(Limelight3A.class, "limelight");
 
         limelight3A.setPollRateHz(100);
         limelight3A.pipelineSwitch(pipeline);
@@ -107,5 +100,14 @@ public class Limelight {
 
     public void stop() {
         limelight3A.stop();
+    }
+
+    public void switchPipeline(int pipeline) {
+        limelight3A.pipelineSwitch(pipeline);
+    }
+
+    public boolean isValid() {
+        LLResult result = limelight3A.getLatestResult();
+        return (result != null) && (result.isValid());
     }
 }
