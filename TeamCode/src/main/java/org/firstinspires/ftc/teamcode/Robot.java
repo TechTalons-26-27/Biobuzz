@@ -43,19 +43,26 @@ public class Robot {
 
     }
 
+    // Inside Robot.java
+    public void loop() {
+        localizer.run(); // Run prediction + vision correction step
+    }
 
-    public void outtake(double outtakeTrigger) {
+
+    /*public void outtake(double outtakeTrigger) {
         outtake.run(outtakeTrigger);
-    }
+    }*/
 
 
-    public void intake(boolean intakeButton) {
+    /*public void intake(boolean intakeButton) {
         intake.run(intakeButton);
-    }
+    }*/
 
 
     public void telemetry(Telemetry telemetry) {
         drive.telemetry(telemetry);
+        localizer.telemetry(telemetry);
+        telemetry.update();
     }
 
     public void switchLLPipeline(int pipeline) {

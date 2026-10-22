@@ -6,6 +6,7 @@ import com.pedropathing.math.Vector2D;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.vision.Limelight;
 import org.firstinspires.ftc.teamcode.util.KalmanFilter;
 
@@ -46,6 +47,14 @@ public class FusionLocalizer {
         if (limelight.isValid()) {
             kalmanFilter.update(limelight.getNewFieldPose(), 4.0, follower.pose().heading());
         }
+    }
+
+    public void telemetry(Telemetry telemetry) {
+        telemetry.addData("Raw Odometry X", follower.pose().x());
+        telemetry.addData("Raw Odometry Y", follower.pose().y());
+        telemetry.addData("Kalman Fused X", getPose().x());
+        telemetry.addData("Kalman Fused Y", getPose().y());
+        telemetry.addData("Limelight Valid", limelight.isValid());
     }
 
     public Pose getPose() {
