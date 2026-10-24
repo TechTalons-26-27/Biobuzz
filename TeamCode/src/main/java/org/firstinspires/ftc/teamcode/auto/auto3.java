@@ -76,10 +76,7 @@ public class auto3 extends LinearOpMode {
     private Command runouttake;
 
     private Command rampupouttake;
-    private Command unintake;
-    private Command hold;
-    private Command timedActionSequence;
-    private Command WarmUp;
+
     public Command autoRoutine() {
         return sequential(
                 parallel(
@@ -100,12 +97,27 @@ public class auto3 extends LinearOpMode {
                         rampupouttake,
                         follow(follower, path5())
                 ),
-
+                runouttake,
                 follow(follower, path6()),
-                follow(follower, path7()),
-                follow(follower, path8()),
-                follow(follower, path9()),
-                follow(follower, path10()),
+                parallel(
+                        follow(follower, path7()),
+                        runintake
+                ),
+                runintake,
+                parallel(
+                        follow(follower, path8()),
+                        rampupouttake
+                ),
+                runouttake,
+                parallel(
+                        follow(follower, path9()),
+                        runintake
+                ),
+                parallel(
+                        follow(follower, path10()),
+                        rampupouttake
+                ),
+                runouttake,
                 follow(follower, path11())
         );
     }
@@ -129,7 +141,7 @@ public class auto3 extends LinearOpMode {
                 .setEnd(endCondition -> {intake.setPower(0); stages.setPower(0);})
                 .requiring(intake);
 
-        Command extendOuttake = Command.build()
+        runouttake = Command.build()
                 .setStart(() -> {
                     outtake.setTargetPosition(1000);
                     outtake.setMode(
