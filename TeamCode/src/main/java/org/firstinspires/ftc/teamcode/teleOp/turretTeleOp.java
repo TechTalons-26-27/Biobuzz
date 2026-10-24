@@ -36,10 +36,7 @@ public class turretTeleOp extends OpMode {
         drive = new Drive(hardwareMap, START_POSE);
 
         limelight = new Limelight(
-                hardwareMap,
-                telemetry,
-                0
-        );
+                hardwareMap, 0);
 
         localizer = new RobotLocalizer(
                 drive,

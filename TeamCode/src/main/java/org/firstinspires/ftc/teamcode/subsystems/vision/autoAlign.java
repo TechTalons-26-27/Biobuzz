@@ -32,7 +32,7 @@ public class autoAlign extends OpMode {
 
     @Override
     public void init() {
-        limelight = new Limelight(hardwareMap, telemetry,0);
+        limelight = new Limelight(hardwareMap,0);
         drive = new BaseDrive(hardwareMap);
 
 

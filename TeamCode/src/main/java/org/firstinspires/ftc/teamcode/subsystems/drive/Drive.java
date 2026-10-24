@@ -7,11 +7,12 @@ import com.pedropathing.drivetrain.DrivePowers;
 import com.pedropathing.math.Pose;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 public class Drive {
 
-    private final Follower follower;
+    private Follower follower;
 
     public Drive(HardwareMap hardwareMap, Pose startPose) {
         follower = Constants.create(hardwareMap);
@@ -28,6 +29,10 @@ public class Drive {
 
         follower.manual(powers);
         follower.update();
+    }
+
+    public void telemetry(Telemetry telemetry) {
+
     }
 
     public Pose getOdometryPose() {

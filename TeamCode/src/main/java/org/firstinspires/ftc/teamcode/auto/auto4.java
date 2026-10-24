@@ -89,7 +89,7 @@ public class auto4 extends LinearOpMode {
         finger = hardwareMap.get(DcMotor.class, "finger");
         stage1.setDirection(DcMotor.Direction.FORWARD);
 
-        runintake = Command.build()
+        /*runintake = Command.build()
                 .setExecute(() -> {intake.setPower(0.7); stage1.setPower(0.7); stage2.setPower(0.7);})
                 .setDone(() -> intake.getCurrentPosition() >1000)
                 .setEnd(endCondition -> {intake.setPower(0); stage1.setPower(0); stage2.setPower(0); })
@@ -99,7 +99,7 @@ public class auto4 extends LinearOpMode {
                 .setExecute(() ->{ intake.setPower(-0.7); outtake.setPower(-0.7); stage1.setPower(-0.7); stage2.setPower(-0.7); finger.setPower(0.5);})
                 .setDone(() -> outtake.getCurrentPosition() >1000)
                 .setEnd(endCondition ->{ intake.setPower(0); outtake.setPower(0); stage1.setPower(0); stage2.setPower(0); finger.setPower(0);})
-                .requiring(outtake);
+                .requiring(outtake);*/
         WarmUp = sequential(
                 instant(() -> {
                     intake.setPower(-1.0);
@@ -138,7 +138,7 @@ public class auto4 extends LinearOpMode {
                     finger.setPower(0);
                 })
         );
-        unintake = Command.build()
+        /*unintake = Command.build()
                 .setExecute(() -> {intake.setPower(-0.7); stage1.setPower(-0.7); stage2.setPower(-0.7);})
                 .setDone(() -> intake.getCurrentPosition() >1000)
                 .setEnd(endCondition -> {intake.setPower(0); stage1.setPower(0); stage2.setPower(0); })
@@ -147,7 +147,7 @@ public class auto4 extends LinearOpMode {
                 .setExecute(() -> {intake.setPower(0.3); stage1.setPower(0.3); stage2.setPower(-0.3);})
                 .setDone(() -> intake.getCurrentPosition() >1000)
                 .setEnd(endCondition -> {intake.setPower(0); stage1.setPower(0); stage2.setPower(0); })
-                .requiring(intake);
+                .requiring(intake);*/
 
         waitForStart();
         schedule(autoRoutine());
