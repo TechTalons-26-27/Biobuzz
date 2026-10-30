@@ -11,11 +11,14 @@ import com.pedropathing.ivy.Scheduler;
 import static com.pedropathing.ivy.Scheduler.schedule;
 import static com.pedropathing.ivy.commands.Commands.instant;
 import static com.pedropathing.ivy.commands.Commands.waitMs;
+import static com.pedropathing.ivy.groups.Groups.deadline;
+import static com.pedropathing.ivy.groups.Groups.parallel;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
@@ -24,11 +27,18 @@ public class auto4 extends LinearOpMode {
 
     private Follower follower;
 
-    private DcMotor stage1;
+    private DcMotor stages;
     private DcMotor outtake;
     private DcMotor intake;
-    private DcMotor stage2;
-    private DcMotor finger;
+
+    private Servo finger;
+
+    double block = 0;
+    double open = 0;
+
+    double intakePower = 0;
+
+    double outtakePower = 0;
 
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
@@ -58,19 +68,30 @@ public class auto4 extends LinearOpMode {
     private Command hold;
     private Command timedActionSequence;
     private Command WarmUp;
+
+    private Command rampupouttake;
     public Command autoRoutine() {
         return sequential(
-                follow(follower, path1()),
-                timedActionSequence,
+                deadline(
+                    follow(follower, path1()),
+                    rampupouttake
+                        ),
+                runouttake,
                 follow(follower, path2()),
                 runintake,
                 follow(follower, path3()),
-                timedActionSequence,
-                follow(follower, path4()),
-                runintake,
+                deadline(
+                    follow(follower, path4()),
+                    rampupouttake
+                        ),
+                runouttake,
                 follow(follower, path5()),
-                follow(follower, path6()),
-                timedActionSequence,
+                runintake,
+                deadline(
+                    follow(follower, path6()),
+                    rampupouttake
+                        ),
+                runouttake,
                 follow(follower, path7())
         );
     }
@@ -82,72 +103,49 @@ public class auto4 extends LinearOpMode {
         follower.setPose(start);
         follower.update();
 
-        stage1 = hardwareMap.get(DcMotor.class, "stage1");
+        stages = hardwareMap.get(DcMotor.class, "stage1");
         outtake = hardwareMap.get(DcMotor.class, "outtake");
         intake = hardwareMap.get(DcMotor.class, "intake");
-        stage2 = hardwareMap.get(DcMotor.class, "stage2");
-        finger = hardwareMap.get(DcMotor.class, "finger");
-        stage1.setDirection(DcMotor.Direction.FORWARD);
+        finger = hardwareMap.get(Servo.class, "finger");
+        stages.setDirection(DcMotor.Direction.FORWARD);
 
-        /*runintake = Command.build()
-                .setExecute(() -> {intake.setPower(0.7); stage1.setPower(0.7); stage2.setPower(0.7);})
+        runintake = Command.build()
+                .setExecute(() -> {intake.setPower(intakePower); stages.setPower(intakePower); finger.setPosition(block); })
                 .setDone(() -> intake.getCurrentPosition() >1000)
-                .setEnd(endCondition -> {intake.setPower(0); stage1.setPower(0); stage2.setPower(0); })
+                .setEnd(endCondition -> {intake.setPower(0); stages.setPower(0); })
                 .requiring(intake);
+
+        rampupouttake = Command.build()
+                .setExecute(() ->{ outtake.setPower(outtakePower); })
+                .setDone(() -> outtake.getCurrentPosition() >1000)
+                .setEnd(endCondition ->{ outtake.setPower(0); })
+                .requiring(outtake);
 
         runouttake = Command.build()
-                .setExecute(() ->{ intake.setPower(-0.7); outtake.setPower(-0.7); stage1.setPower(-0.7); stage2.setPower(-0.7); finger.setPower(0.5);})
-                .setDone(() -> outtake.getCurrentPosition() >1000)
-                .setEnd(endCondition ->{ intake.setPower(0); outtake.setPower(0); stage1.setPower(0); stage2.setPower(0); finger.setPower(0);})
-                .requiring(outtake);*/
-        WarmUp = sequential(
-                instant(() -> {
-                    intake.setPower(-1.0);
-                    outtake.setPower(-1.0);
-                    stage1.setPower(-1.0);
-                    stage2.setPower(-1.0);
-                    finger.setPower(1.0);
-                }),
-
-                waitMs(1000),
-
-                instant(() -> {
-                    intake.setPower(0);
-                    outtake.setPower(0);
-                    stage1.setPower(0);
-                    stage2.setPower(0);
-                    finger.setPower(0);
+                .setStart(() -> {
+                    outtake.setTargetPosition(1000);
+                    outtake.setMode(
+                            DcMotor.RunMode.RUN_TO_POSITION
+                    );
+                    intake.setPower(0.7);
+                    stages.setPower(0.7);
+                    outtake.setPower(0.7);
+                    finger.setPosition(open);
                 })
-        );
-        timedActionSequence = sequential(
-                instant(() -> {
-                    intake.setPower(-0.7);
-                    outtake.setPower(-0.7);
-                    stage1.setPower(-0.7);
-                    stage2.setPower(-0.7);
-                    finger.setPower(0.5);
-                }),
-
-                waitMs(1000),
-
-                instant(() -> {
-                    intake.setPower(0);
-                    outtake.setPower(0);
-                    stage1.setPower(0);
-                    stage2.setPower(0);
-                    finger.setPower(0);
-                })
-        );
-        /*unintake = Command.build()
-                .setExecute(() -> {intake.setPower(-0.7); stage1.setPower(-0.7); stage2.setPower(-0.7);})
-                .setDone(() -> intake.getCurrentPosition() >1000)
-                .setEnd(endCondition -> {intake.setPower(0); stage1.setPower(0); stage2.setPower(0); })
-                .requiring(intake);
-        hold = Command.build()
-                .setExecute(() -> {intake.setPower(0.3); stage1.setPower(0.3); stage2.setPower(-0.3);})
-                .setDone(() -> intake.getCurrentPosition() >1000)
-                .setEnd(endCondition -> {intake.setPower(0); stage1.setPower(0); stage2.setPower(0); })
-                .requiring(intake);*/
+                .setDone(() ->
+                        Math.abs(
+                                outtake.getTargetPosition()
+                                        - outtake.getCurrentPosition()
+                        ) < 15
+                )
+                .setEnd(endCondition ->{
+                            outtake.setPower(0);
+                            intake.setPower(0);
+                            stages.setPower(0);
+                            finger.setPosition(block);
+                        }
+                )
+                .requiring(outtake);
 
         waitForStart();
         schedule(autoRoutine());
