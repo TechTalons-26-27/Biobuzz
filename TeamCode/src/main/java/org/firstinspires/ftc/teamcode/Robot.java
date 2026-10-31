@@ -15,55 +15,57 @@ import org.firstinspires.ftc.teamcode.subsystems.vision.Limelight;
 
 public class Robot {
     Drive drive;
-    Intake intake;
-    Outtake outtake;
-    Limelight limelight;
+//    Intake intake;
+//    Outtake outtake;
+//    Limelight limelight;
     FusionLocalizer localizer;
-
 
     public void initSubsystems(HardwareMap hardwareMap, Pose startPose) {
         drive = new Drive(hardwareMap, startPose);
-        limelight = new Limelight(hardwareMap, 0);
+//        limelight = new Limelight(hardwareMap, 0);
         localizer = new FusionLocalizer(hardwareMap, startPose);
 
         //intake = new Intake(hardwareMap);
         //outtake = new Outtake(hardwareMap);
-
-
-
     }
 
 
-    public void drive(double forward, double lateral, double rotate) {
+    public void manualDrive(double forward, double lateral, double rotate) {
         drive.run(forward, lateral, rotate);
+//        localizer.run();
+//        drive.updatePose(localizer.getPose());
     }
 
 
     public void start() {
-
+//        localizer.start();
     }
 
 
-    public void outtake(double outtakeTrigger) {
-        outtake.run(outtakeTrigger);
-    }
-
-
-    public void intake(boolean intakeButton) {
-        intake.run(intakeButton);
-    }
+//    public void outtake(double outtakeTrigger) {
+//        outtake.run(outtakeTrigger);
+//    }
+//
+//
+//    public void intake(boolean intakeButton) {
+//        intake.run(intakeButton);
+//    }
 
 
     public void telemetry(Telemetry telemetry) {
         drive.telemetry(telemetry);
     }
 
-    public void switchLLPipeline(int pipeline) {
-        limelight.switchPipeline(pipeline);
-    }
+//    public void switchLLPipeline(int pipeline) {
+//        limelight.switchPipeline(pipeline);
+//    }
 
     public Pose getPose() {
-        return localizer.getPose();
+        return drive.getOdometryPose();
+    }
+
+    public double track(double curTime) {
+//        localizer.run();
+        return drive.track(drive.getOdometryPose(), new Pose(0,0,0), curTime);
     }
 }
-

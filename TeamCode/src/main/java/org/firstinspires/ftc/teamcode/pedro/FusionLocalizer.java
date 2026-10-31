@@ -6,21 +6,20 @@ import com.pedropathing.math.Vector2D;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.subsystems.vision.Limelight;
 import org.firstinspires.ftc.teamcode.util.KalmanFilter;
 
 public class FusionLocalizer {
     private final Follower follower;
     private final ElapsedTime timer;
     private final KalmanFilter kalmanFilter;
-    private final Limelight limelight;
+//    private final Limelight limelight;
 
     public FusionLocalizer(HardwareMap hardwareMap, Pose startPose) {
         follower = Constants.create(hardwareMap);
         follower.setPose(startPose);
         follower.update();
 
-        limelight = new Limelight(hardwareMap,1);
+//        limelight = new Limelight(hardwareMap,1);
 
         timer = new ElapsedTime();
 
@@ -43,9 +42,9 @@ public class FusionLocalizer {
         kalmanFilter.predict(velocity, dt, follower.pose().heading());
 
         //TODO: TUNE LIMELIGHT VARIANCE
-        if (limelight.isValid()) {
-            kalmanFilter.update(limelight.getNewFieldPose(), 4.0, follower.pose().heading());
-        }
+//        if (limelight.isValid()) {
+//            kalmanFilter.update(limelight.getNewFieldPose(), 4.0, follower.pose().heading());
+//        }
     }
 
     public Pose getPose() {

@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.util.PoseStorage;
 @TeleOp(name="kalman test")
 public class initialTeleOp extends OpMode {
 
-
     Robot robot;
     double forward, lateral, rotate;
 
@@ -36,9 +35,11 @@ public class initialTeleOp extends OpMode {
         lateral = -gamepad1.left_stick_x;
         rotate = -gamepad1.right_stick_x;
 
+        if (gamepad1.y) {
+            rotate = robot.track(getRuntime());
+        }
 
-        robot.drive(forward, lateral, rotate);
-
+        robot.manualDrive(forward, lateral, rotate);
 
 //        if (gamepad1.right_trigger > 0.2) {
 //            robot.outtake(gamepad1.right_trigger);
@@ -54,5 +55,6 @@ public class initialTeleOp extends OpMode {
 
 
         robot.telemetry(telemetry);
+        telemetry.addData("rotate", rotate);
     }
 }

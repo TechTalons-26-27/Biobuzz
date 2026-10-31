@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.subsystems.drive.BaseDrive;
 
-@TeleOp(name="Auto Align Test")
 public class autoAlign extends OpMode {
 
     private Limelight limelight;
