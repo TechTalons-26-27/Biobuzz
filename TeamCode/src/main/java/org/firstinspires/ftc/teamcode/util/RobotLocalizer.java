@@ -34,13 +34,13 @@ public class RobotLocalizer {
         this.limelight = limelight;
 
         filter = new KalmanFilter(startPose, 1.0, 1.0);
-        lastOdometryPose = drive.getOdometryPose();
+        lastOdometryPose = drive.getPose();
         timer.reset();
     }
 
     public void update() {
 
-        Pose odom = drive.getOdometryPose();
+        Pose odom = drive.getPose();
 
         double dx = odom.x() - lastOdometryPose.x();
         double dy = odom.y() - lastOdometryPose.y();
@@ -91,7 +91,7 @@ public class RobotLocalizer {
     }
 
     public Pose getOdometryPose() {
-        return drive.getOdometryPose();
+        return drive.getPose();
     }
 
     public boolean wasVisionUpdated() {

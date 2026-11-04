@@ -8,9 +8,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.pedro.FusionLocalizer;
 import org.firstinspires.ftc.teamcode.subsystems.drive.Drive;
-import org.firstinspires.ftc.teamcode.subsystems.intake.Intake;
-import org.firstinspires.ftc.teamcode.subsystems.outtake.Outtake;
-import org.firstinspires.ftc.teamcode.subsystems.vision.Limelight;
 
 
 public class Robot {
@@ -21,9 +18,9 @@ public class Robot {
     FusionLocalizer localizer;
 
     public void initSubsystems(HardwareMap hardwareMap, Pose startPose) {
+        localizer = new FusionLocalizer(hardwareMap, startPose);
         drive = new Drive(hardwareMap, startPose);
 //        limelight = new Limelight(hardwareMap, 0);
-        localizer = new FusionLocalizer(hardwareMap, startPose);
 
         //intake = new Intake(hardwareMap);
         //outtake = new Outtake(hardwareMap);
@@ -32,13 +29,14 @@ public class Robot {
 
     public void manualDrive(double forward, double lateral, double rotate) {
         drive.run(forward, lateral, rotate);
-//        localizer.run();
+        localizer.run();
 //        drive.updatePose(localizer.getPose());
     }
 
 
-    public void start() {
-//        localizer.start();
+    public void start(double curTime) {
+        localizer.start();
+        drive.start(curTime);
     }
 
 
@@ -61,11 +59,16 @@ public class Robot {
 //    }
 
     public Pose getPose() {
-        return drive.getOdometryPose();
+        return drive.getPose();
     }
 
-    public double track(double curTime) {
+    public double track(double curTime, Pose targetPose) {
 //        localizer.run();
-        return drive.track(drive.getOdometryPose(), new Pose(0,0,0), curTime);
+        return drive.track(drive.getPose(), targetPose, curTime);
+    }
+
+    public void localize() {
+        localizer.run();
+        drive.updatePose(localizer.getPose());
     }
 }

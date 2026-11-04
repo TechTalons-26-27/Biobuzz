@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.teleOp;
 
 
+import com.pedropathing.api.PoseFactory;
+import com.pedropathing.math.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -15,28 +17,41 @@ public class initialTeleOp extends OpMode {
     Robot robot;
     double forward, lateral, rotate;
 
+    double kP = 0;
+    double kD = 0;
+
+    double[] stepSizes = {0.1, 0.01,0.001, 0.0001};
+    int stepIndex = 2;
+
+    final PoseFactory p = PoseFactory.radians();
+    Pose startPose = p.of(0,0,0);
+    Pose targetPose = p.of(0,0,0);
 
     @Override
     public void init() {
         robot = new Robot();
-        robot.initSubsystems(hardwareMap, PoseStorage.currentPose);
+        robot.initSubsystems(hardwareMap, targetPose);
     }
 
 
     @Override
     public void start() {
-        robot.start();
+        resetRuntime();
+        robot.start(getRuntime());
     }
 
 
     @Override
     public void loop() {
+
+        robot.localize();
+
         forward = -gamepad1.left_stick_y;
         lateral = -gamepad1.left_stick_x;
         rotate = -gamepad1.right_stick_x;
 
         if (gamepad1.y) {
-            rotate = robot.track(getRuntime());
+            rotate = robot.track(getRuntime(), targetPose);
         }
 
         robot.manualDrive(forward, lateral, rotate);
@@ -55,6 +70,5 @@ public class initialTeleOp extends OpMode {
 
 
         robot.telemetry(telemetry);
-        telemetry.addData("rotate", rotate);
     }
 }
