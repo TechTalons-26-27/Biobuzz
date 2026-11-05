@@ -26,10 +26,12 @@ public class auto3 extends LinearOpMode {
 
     private Follower follower;
 
+/*
     private DcMotor stages;
     private DcMotor outtake;
     private DcMotor intake;
     private Servo finger;
+*/
 
     private double open;
 
@@ -77,7 +79,7 @@ public class auto3 extends LinearOpMode {
 
     private Command rampupouttake;
 
-    public Command autoRoutine() {
+    /*public Command autoRoutine() {
         return sequential(
                 parallel(
                         follow(follower, path1()),
@@ -120,6 +122,22 @@ public class auto3 extends LinearOpMode {
                 runouttake,
                 follow(follower, path11())
         );
+    }*/
+
+    public Command autoRoutine() {
+        return sequential(
+                follow(follower, path1()),
+                follow(follower, path2()),
+                follow(follower, path3()),
+                follow(follower, path4()),
+                follow(follower, path5()),
+                follow(follower, path6()),
+                follow(follower, path7()),
+                follow(follower, path8()),
+                follow(follower, path9()),
+                follow(follower, path10()),
+                follow(follower, path11())
+        );
     }
 
     @Override
@@ -129,7 +147,7 @@ public class auto3 extends LinearOpMode {
         follower.setPose(start);
         follower.update();
 
-        outtake = hardwareMap.get(DcMotor.class, "outtake");
+    /*    outtake = hardwareMap.get(DcMotor.class, "outtake");
         intake = hardwareMap.get(DcMotor.class, "intake");
         stages = hardwareMap.get(DcMotor.class, "stages");
         finger = hardwareMap.get(Servo.class, "finger");
@@ -172,7 +190,7 @@ public class auto3 extends LinearOpMode {
                 .setExecute(() ->{ intake.setPower(-intakePower); outtake.setPower(-0.7); stages.setPower(-intakePower); finger.setPosition(block);})
                 .setDone(() -> outtake.getCurrentPosition() >1000)
                 .setEnd(endCondition ->{ intake.setPower(0); outtake.setPower(0); stages.setPower(0); finger.setPosition(50);})
-                .requiring(outtake);
+                .requiring(outtake);*/
 
 
         waitForStart();

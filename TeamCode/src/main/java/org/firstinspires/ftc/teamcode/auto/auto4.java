@@ -27,11 +27,11 @@ public class auto4 extends LinearOpMode {
 
     private Follower follower;
 
-    private DcMotor stages;
+    /*private DcMotor stages;
     private DcMotor outtake;
     private DcMotor intake;
 
-    private Servo finger;
+    private Servo finger;*/
 
     double block = 0;
     double open = 0;
@@ -70,7 +70,7 @@ public class auto4 extends LinearOpMode {
     private Command WarmUp;
 
     private Command rampupouttake;
-    public Command autoRoutine() {
+    /*public Command autoRoutine() {
         return sequential(
                 deadline(
                     follow(follower, path1()),
@@ -94,6 +94,18 @@ public class auto4 extends LinearOpMode {
                 runouttake,
                 follow(follower, path7())
         );
+    }*/
+
+    public Command autoRoutine() {
+        return sequential(
+                follow(follower, path1()),
+                follow(follower, path2()),
+                follow(follower, path3()),
+                follow(follower, path4()),
+                follow(follower, path5()),
+                follow(follower, path6()),
+                follow(follower, path7())
+        );
     }
 
     @Override
@@ -103,7 +115,7 @@ public class auto4 extends LinearOpMode {
         follower.setPose(start);
         follower.update();
 
-        stages = hardwareMap.get(DcMotor.class, "stage1");
+        /*stages = hardwareMap.get(DcMotor.class, "stage1");
         outtake = hardwareMap.get(DcMotor.class, "outtake");
         intake = hardwareMap.get(DcMotor.class, "intake");
         finger = hardwareMap.get(Servo.class, "finger");
@@ -145,7 +157,7 @@ public class auto4 extends LinearOpMode {
                             finger.setPosition(block);
                         }
                 )
-                .requiring(outtake);
+                .requiring(outtake);*/
 
         waitForStart();
         schedule(autoRoutine());
