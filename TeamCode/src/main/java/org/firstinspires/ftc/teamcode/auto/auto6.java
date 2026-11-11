@@ -1,7 +1,9 @@
+/*
 package org.firstinspires.ftc.teamcode.auto;
 
 import static com.pedropathing.api.Paths.*;
 
+import com.pedropathing.api.Paths;
 import com.pedropathing.api.PoseFactory;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.math.Pose;
@@ -35,9 +37,19 @@ public class auto6 extends LinearOpMode {
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
     private final Pose start = poseFactory.of(56, 8, 90);
-    private final Pose path1 = poseFactory.of(56.4617, 29.075, 90);
-    private final Pose point2 = poseFactory.of(29.6044, 54.376, 136.7091);
-    private final Pose point3 = poseFactory.of(11.7455, 99.314, 111.6735);
+    private final Pose path1 = poseFactory.of(56.2121, 22.4228, 90);
+    private final Pose point2 = poseFactory.of(22.6994, 9.7586, 179.0649);
+    private final Pose point2Control1 = poseFactory.of(56.2813, 55.3339, 0);
+    private final Pose point2Control2 = poseFactory.of(37.8111, 9.512, 0);
+    private final Pose point3 = poseFactory.of(9.3343, 9.7586, 180);
+    private final Pose point4 = poseFactory.of(21.7026, 9.3955, 178.3181);
+    private final Pose point5 = poseFactory.of(55.9245, 22.0071, 90.6326);
+    private final Pose point5Control1 = poseFactory.of(37.8557, 9.5787, 0);
+    private final Pose point5Control2 = poseFactory.of(55.5549, 55.4806, 0);
+    private final Pose path6 = poseFactory.of(11.0671, 98.061, 90.2811);
+    private final Pose path6Control1 = poseFactory.of(61.6023, 69.5705, 0);
+    private final Pose path6Control2 = poseFactory.of(0, 0, 0);
+    private final Pose path6Control3 = poseFactory.of(11.1566, 79.8263, 0);
 
     private Command runintake;
     private Command runouttake;
@@ -159,10 +171,26 @@ public class auto6 extends LinearOpMode {
     }
 
     public Path path2() {
-        return line(path1, point2).tangent();
+        return curve(path1, point2Control1, point2Control2, point2).tangent();
     }
 
     public Path path3() {
         return line(point2, point3).tangent();
     }
+
+    public Path path4() {
+        return line(point3, point4).reverseTangent();
+    }
+
+    public Path path5() {
+        return curve(point4, point5Control1, point5Control2, point5).reverseTangent();
+    }
+
+    public Path path6() {
+        return curve(point5, path6Control1, path6Control2, path6Control3, path6).tangent();
+    }
+
 }
+
+
+*/

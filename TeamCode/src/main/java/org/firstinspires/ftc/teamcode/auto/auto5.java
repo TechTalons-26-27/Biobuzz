@@ -1,3 +1,4 @@
+/*
 package org.firstinspires.ftc.teamcode.auto;
 
 import static com.pedropathing.api.Paths.*;
@@ -42,27 +43,25 @@ public class auto5 extends LinearOpMode {
 
     private final PoseFactory poseFactory = PoseFactory.degrees();
 
-    private final Pose start = poseFactory.of(58.5463, 9.0913, 90);
-    private final Pose path1 = poseFactory.of(58.5643, 34.1019, 90);
-    private final Pose point2 = poseFactory.of(13.2059, 47.0116, 179.4569);
-    private final Pose point2Control1 = poseFactory.of(53.177, 49.6467, 0);
-    private final Pose point2Control2 = poseFactory.of(41.3638, 46.7147, 0);
-    private final Pose point3Start = poseFactory.of(13.2059, 47.0116, 180);
-    private final Pose point3 = poseFactory.of(25.6247, 46.9846, 180);
-    private final Pose point4 = poseFactory.of(58.9871, 107.8342, -91.6451);
-    private final Pose point4Control1 = poseFactory.of(22.3548, 118.5707, 0);
-    private final Pose point4Control2 = poseFactory.of(60.2674, 139.3805, 0);
-    private final Pose point5 = poseFactory.of(58.6388, 33.7134, 87.5897);
-    private final Pose point5Control1 = poseFactory.of(55.4409, 94.8316, 0);
-    private final Pose point5Control2 = poseFactory.of(-1.3907, 105.563, 0);
-    private final Pose point5Control3 = poseFactory.of(58.1748, -0.0206, 0);
-    private final Pose point6 = poseFactory.of(58.9897, 107.6568, -88.2141);
-    private final Pose point6Control1 = poseFactory.of(4.9833, 92.374, 0);
-    private final Pose point6Control2 = poseFactory.of(42.4486, 105.5578, 0);
-    private final Pose point6Control3 = poseFactory.of(58.5437, 130.2095, 0);
-    private final Pose point7 = poseFactory.of(10.4306, 107, 178.7954);
-    private final Pose point7Control1 = poseFactory.of(57.5488, 92, 0);
-    private final Pose point7Control2 = poseFactory.of(21.0694, 106.9177, 0);
+    private final Pose start = poseFactory.of(56, 8, 90);
+    private final Pose path1 = poseFactory.of(55.5501, 26.5517, 90);
+    private final Pose point2 = poseFactory.of(12.0221, 45.8338, 173.5623);
+    private final Pose point2Control1 = poseFactory.of(55.6009, 40.9166, 0);
+    private final Pose point3 = poseFactory.of(55.5782, 117.6133, -89.2302);
+    private final Pose point3Control1 = poseFactory.of(3.101, 68.991, 0);
+    private final Pose point3Control2 = poseFactory.of(13.5322, 103.9722, 0);
+    private final Pose point3Control3 = poseFactory.of(55.9145, 92.5857, 0);
+    private final Pose point4 = poseFactory.of(51.3157, 128.9316, 110.6366);
+    private final Pose point5 = poseFactory.of(54.8658, 117.8798, -87.8029);
+    private final Pose point5Control1 = poseFactory.of(54.6598, 123.2489, 0);
+    private final Pose point6 = poseFactory.of(55.6341, 26.9021, 89.9607);
+    private final Pose point6Control1 = poseFactory.of(7.2707, 87.0804, 0);
+    private final Pose point6Control2 = poseFactory.of(0, 38.8406, 0);
+    private final Pose point6Control3 = poseFactory.of(55.6396, 34.9757, 0);
+    private final Pose point7 = poseFactory.of(11.2499, 97.619, 93.6919);
+    private final Pose point7Control1 = poseFactory.of(60.2678, 37.3277, 0);
+    private final Pose point7Control2 = poseFactory.of(3.104, 34.8364, 0);
+    private final Pose point7Control3 = poseFactory.of(12.3057, 81.2568, 0);
 
     private Command runintake;
     private Command runouttake;
@@ -177,26 +176,27 @@ public class auto5 extends LinearOpMode {
     }
 
     public Path path2() {
-        return curve(path1, point2Control1, point2Control2, point2).tangent();
+        return curve(path1, point2Control1, point2).tangent();
     }
 
     public Path path3() {
-        return line(point3Start, point3).linear(point3Start, point3);
+        return curve(point2, point3Control1, point3Control2, point3Control3, point3).reverseTangent();
     }
 
     public Path path4() {
-        return curve(point3, point4Control1, point4Control2, point4).tangent();
+        return line(point3, point4).tangent();
     }
 
     public Path path5() {
-        return curve(point4, point5Control1, point5Control2, point5Control3, point5).tangent();
+        return curve(point4, point5Control1, point5).tangent();
     }
 
     public Path path6() {
-        return curve(point5, point6Control1, point6Control2, point6Control3, point6).tangent();
+        return curve(point5, point6Control1, point6Control2, point6Control3, point6).reverseTangent();
     }
 
     public Path path7() {
-        return curve(point6, point7Control1, point7Control2, point7).tangent();
+        return curve(point6, point7Control1, point7Control2, point7Control3, point7).tangent();
     }
 }
+*/

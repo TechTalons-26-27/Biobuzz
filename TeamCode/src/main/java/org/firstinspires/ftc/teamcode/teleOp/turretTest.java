@@ -10,7 +10,7 @@ import com.pedropathing.math.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name = "Turret Kalman Tracking")
+@TeleOp(name = "Turret Tester")
 public class turretTest extends OpMode {
 
     private Servo turretServo;
@@ -27,7 +27,7 @@ public class turretTest extends OpMode {
 
     public void loop() {
 
-        turretPower = 0;
+        turretPower = 0.5;
 
         if (gamepad2.a) {
             turretPower += 1;
