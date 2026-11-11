@@ -22,7 +22,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
-@Autonomous(name = "AutoPath", group = "Autonomous")
+@Autonomous(name = "auto5", group = "Autonomous")
 public class auto5 extends LinearOpMode {
 
     private Follower follower;
