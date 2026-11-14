@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-@TeleOp(name = "Basic TeleOp (Field Centric)")
+@TeleOp(name = "Basic TeleOp (Robot Centric)")
 public class basicTeleOpR extends LinearOpMode {
 
     //Pedro Constants
