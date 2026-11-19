@@ -18,6 +18,7 @@ import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
@@ -25,11 +26,11 @@ import org.firstinspires.ftc.teamcode.pedro.Constants;
 public class auto2 extends LinearOpMode {
 
     private Follower follower;
-    //    private DcMotor stages;
-//    private DcMotor outtake;
-//    private DcMotor intake;
-//
-//    private Servo finger;
+    private DcMotor stages;
+    private DcMotor outtake;
+    private DcMotor intake;
+
+    private Servo finger;
 
     double block = 0;
     double open = 0;
@@ -56,11 +57,13 @@ public class auto2 extends LinearOpMode {
 
     private Command runintake;
     private Command runouttake;
+
+    private Command rampupouttake;
     private Command unintake;
     private Command hold;
     private Command timedActionSequence;
     private Command WarmUp;
-    /*public Command autoRoutine() {
+    public Command autoRoutine() {
         return sequential(
                 follow(follower, path1()),
                 timedActionSequence,
@@ -71,16 +74,16 @@ public class auto2 extends LinearOpMode {
                 timedActionSequence,
                 follow(follower, path5())
         );
-    }*/
-    public Command autoRoutine() {
-        return sequential(
-                follow(follower, path1()),
-                follow(follower, path2()),
-                follow(follower, path3()),
-                follow(follower, path4()),
-                follow(follower, path5())
-        );
     }
+//    public Command autoRoutine() {
+//        return sequential(
+//                follow(follower, path1()),
+//                follow(follower, path2()),
+//                follow(follower, path3()),
+//                follow(follower, path4()),
+//                follow(follower, path5())
+//        );
+//    }
 
     @Override
     public void runOpMode() {
@@ -89,49 +92,49 @@ public class auto2 extends LinearOpMode {
         follower.setPose(start);
         follower.update();
 
-//        stages = hardwareMap.get(DcMotor.class, "stage1");
-//        outtake = hardwareMap.get(DcMotor.class, "outtake");
-//        intake = hardwareMap.get(DcMotor.class, "intake");
-//        finger = hardwareMap.get(Servo.class, "finger");
-//        stages.setDirection(DcMotor.Direction.FORWARD);
+        stages = hardwareMap.get(DcMotor.class, "stage1");
+        outtake = hardwareMap.get(DcMotor.class, "outtake");
+        intake = hardwareMap.get(DcMotor.class, "intake");
+        finger = hardwareMap.get(Servo.class, "finger");
+        stages.setDirection(DcMotor.Direction.FORWARD);
 
-//        runintake = Command.build()
-//                .setExecute(() -> {intake.setPower(intakePower); stages.setPower(intakePower); finger.setPosition(block); })
-//                .setDone(() -> intake.getCurrentPosition() >1000)
-//                .setEnd(endCondition -> {intake.setPower(0); stages.setPower(0); })
-//                .requiring(intake);
-//
-//        rampupouttake = Command.build()
-//                .setExecute(() ->{ outtake.setPower(outtakePower); })
-//                .setDone(() -> outtake.getCurrentPosition() >1000)
-//                .setEnd(endCondition ->{ outtake.setPower(0); })
-//                .requiring(outtake);
-//
-//        runouttake = Command.build()
-//                .setStart(() -> {
-//                    outtake.setTargetPosition(1000);
-//                    outtake.setMode(
-//                            DcMotor.RunMode.RUN_TO_POSITION
-//                    );
-//                    intake.setPower(0.7);
-//                    stages.setPower(0.7);
-//                    outtake.setPower(0.7);
-//                    finger.setPosition(open);
-//                })
-//                .setDone(() ->
-//                        Math.abs(
-//                                outtake.getTargetPosition()
-//                                        - outtake.getCurrentPosition()
-//                        ) < 15
-//                )
-//                .setEnd(endCondition ->{
-//                            outtake.setPower(0);
-//                            intake.setPower(0);
-//                            stages.setPower(0);
-//                            finger.setPosition(block);
-//                        }
-//                )
-//                .requiring(outtake);
+        runintake = Command.build()
+                .setExecute(() -> {intake.setPower(intakePower); stages.setPower(intakePower); finger.setPosition(block); })
+                .setDone(() -> intake.getCurrentPosition() >1000)
+                .setEnd(endCondition -> {intake.setPower(0); stages.setPower(0); })
+                .requiring(intake);
+
+        rampupouttake = Command.build()
+                .setExecute(() ->{ outtake.setPower(outtakePower); })
+                .setDone(() -> outtake.getCurrentPosition() >1000)
+                .setEnd(endCondition ->{ outtake.setPower(0); })
+                .requiring(outtake);
+
+        runouttake = Command.build()
+                .setStart(() -> {
+                    outtake.setTargetPosition(1000);
+                    outtake.setMode(
+                            DcMotor.RunMode.RUN_TO_POSITION
+                    );
+                    intake.setPower(0.7);
+                    stages.setPower(0.7);
+                    outtake.setPower(0.7);
+                    finger.setPosition(open);
+                })
+                .setDone(() ->
+                        Math.abs(
+                                outtake.getTargetPosition()
+                                        - outtake.getCurrentPosition()
+                        ) < 15
+                )
+                .setEnd(endCondition ->{
+                            outtake.setPower(0);
+                            intake.setPower(0);
+                            stages.setPower(0);
+                            finger.setPosition(block);
+                        }
+                )
+                .requiring(outtake);
 
         waitForStart();
         schedule(autoRoutine());
