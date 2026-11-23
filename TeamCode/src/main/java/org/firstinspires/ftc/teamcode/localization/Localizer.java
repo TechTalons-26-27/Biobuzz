@@ -5,8 +5,6 @@ import com.pedropathing.math.Pose;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.pedro.Constants;
-
 import org.firstinspires.ftc.teamcode.subsystems.vision.Limelight;
 
 public class Localizer {
@@ -18,11 +16,9 @@ public class Localizer {
     private Pose lastOdomPose;
     private final Limelight limelight;
 
-    public Localizer(HardwareMap hardwareMap, Pose startPose) {
-        follower = Constants.create(hardwareMap);
-        follower.setPose(startPose);
-        follower.update();
-        lastOdomPose = follower.pose();
+    public Localizer(HardwareMap hardwareMap, Follower follower, Pose startPose) {
+        this.follower = follower;
+        lastOdomPose = startPose;
 
         limelight = ENABLE_VISION ? new Limelight(hardwareMap, 1) : null;
 
@@ -37,8 +33,6 @@ public class Localizer {
     }
 
     public void run() {
-        follower.update();
-
         double dt = timer.seconds();
         timer.reset();
 
@@ -58,6 +52,12 @@ public class Localizer {
                 kalmanFilter.update(visionPose, 4.0, odomPose.heading());
             }
         }
+
+        // Write the fused pose back to the shared follower and re-baseline odometry
+        // so the next predict step doesn't see the correction as robot motion.
+        Pose fused = kalmanFilter.getPose();
+        follower.setPose(fused);
+        lastOdomPose = fused;
     }
 
     public Pose getPose() {

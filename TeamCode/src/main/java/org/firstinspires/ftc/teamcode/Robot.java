@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import com.pedropathing.follower.Follower;
 import com.pedropathing.math.Pose;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.localization.Localizer;
+import org.firstinspires.ftc.teamcode.pedro.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.drive.Drive;
 import org.firstinspires.ftc.teamcode.subsystems.turret.Turret;
 import org.firstinspires.ftc.teamcode.util.Alliance;
@@ -20,10 +22,14 @@ public class Robot {
 //    Limelight limelight;
     Localizer localizer;
     Turret turret;
+    Follower follower;
 
     public void initSubsystems(HardwareMap hardwareMap, Pose startPose) {
-        localizer = new Localizer(hardwareMap, startPose);
-        drive = new Drive(hardwareMap, startPose);
+        follower = Constants.create(hardwareMap);
+        follower.setPose(startPose);
+
+        localizer = new Localizer(hardwareMap, follower, startPose);
+        drive = new Drive(follower);
         turret = new Turret(hardwareMap);
 //        limelight = new Limelight(hardwareMap, 0);
 
@@ -34,8 +40,6 @@ public class Robot {
 
     public void manualDrive(double forward, double lateral, double rotate) {
         drive.run(forward, lateral, rotate);
-        localizer.run();
-//        drive.updatePose(localizer.getPose());
     }
 
 
@@ -85,6 +89,5 @@ public class Robot {
 
     public void localize() {
         localizer.run();
-        drive.updatePose(localizer.getPose());
     }
 }

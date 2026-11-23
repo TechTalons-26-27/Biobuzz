@@ -5,16 +5,14 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.ManualDrive;
 import com.pedropathing.drivetrain.DrivePowers;
 import com.pedropathing.math.Pose;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.pedro.Constants;
 import org.firstinspires.ftc.teamcode.util.Heading;
 
 public class Drive {
 
-    private Follower follower;
+    private final Follower follower;
 
     double kP = 0;
     double error = 0;
@@ -24,10 +22,9 @@ public class Drive {
     double curTime = 0;
     double lastTime = 0;
 
-
-    public Drive(HardwareMap hardwareMap, Pose startPose) {
-        follower = Constants.create(hardwareMap);
-        follower.setPose(startPose);
+    
+    public Drive(Follower follower) {
+        this.follower = follower;
     }
 
     public Pose getPose() {
