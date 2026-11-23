@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.localization;
 
 import com.pedropathing.math.Pose;
-import com.pedropathing.math.Vector2D;
 
 public class KalmanFilter {
+
+    // TODO: TUNE Process noise added to the variance (in^2).
+    /** Per inch travelled, odometry drift. */
+    private static final double DRIFT_NOISE = 0.05;
 
     private double xVariance;
     private double yVariance;
@@ -18,16 +21,23 @@ public class KalmanFilter {
 
     }
 
-    public void predict(Vector2D velocity, double dt, double heading) {
+    /**
+     * Advance the estimate by the odometry displacement since the last call.
+     *
+     * @param dx      field-frame x displacement since last predict (inches)
+     * @param dy      field-frame y displacement since last predict (inches)
+     * @param dt      seconds since last predict
+     * @param heading current heading (rad)
+     */
+    public void predict(double dx, double dy, double dt, double heading) {
 
-        // Grow uncertainty over time based on velocity
-        xVariance += dt * dt * Math.abs(velocity.x());
-        yVariance += dt * dt * Math.abs(velocity.y());
+        // Uncertainty grows with distance travelled (odometry drift). Independent of loop rate.
+        xVariance += DRIFT_NOISE * Math.abs(dx);
+        yVariance += DRIFT_NOISE * Math.abs(dy);
 
-        // Advance position prediction
         filterPose = new Pose(
-                filterPose.x() + velocity.x() * dt,
-                filterPose.y() + velocity.y() * dt,
+                filterPose.x() + dx,
+                filterPose.y() + dy,
                 heading
         );
     }

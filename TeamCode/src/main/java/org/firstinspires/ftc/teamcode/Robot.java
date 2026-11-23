@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.pedro.FusionLocalizer;
+import org.firstinspires.ftc.teamcode.localization.Localizer;
 import org.firstinspires.ftc.teamcode.subsystems.drive.Drive;
 
 
@@ -15,10 +15,10 @@ public class Robot {
 //    Intake intake;
 //    Outtake outtake;
 //    Limelight limelight;
-    FusionLocalizer localizer;
+    Localizer localizer;
 
     public void initSubsystems(HardwareMap hardwareMap, Pose startPose) {
-        localizer = new FusionLocalizer(hardwareMap, startPose);
+        localizer = new Localizer(hardwareMap, startPose);
         drive = new Drive(hardwareMap, startPose);
 //        limelight = new Limelight(hardwareMap, 0);
 
