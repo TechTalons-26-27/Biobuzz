@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.util;
 
 import com.pedropathing.math.Pose;
 
-/** Turret target cells in Pedro coordinates (inches). */
 public enum Cell {
     RED_AUDIENCE(Alliance.RED, 57.75, 57.75),
     RED_OTHER(Alliance.RED, 57.75, 83.75),
@@ -17,7 +16,7 @@ public enum Cell {
         this.pose = new Pose(x, y);
     }
 
-    /** Returns the closest cell belonging to the given alliance (other alliance's cells are ignored). */
+    // Returns the closest cell belonging to the given alliance (other alliance's cells are ignored).
     public static Cell closest(Alliance alliance, Pose robotPose) {
         Cell best = null;
         double bestDist = Double.MAX_VALUE;

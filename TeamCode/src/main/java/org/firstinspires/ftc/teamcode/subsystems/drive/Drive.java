@@ -1,8 +1,6 @@
 
 package org.firstinspires.ftc.teamcode.subsystems.drive;
 
-import static com.pedropathing.api.Paths.line;
-
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.ManualDrive;
 import com.pedropathing.drivetrain.DrivePowers;
@@ -26,8 +24,6 @@ public class Drive {
     double curTime = 0;
     double lastTime = 0;
 
-
-    // --------------------------- Drive ---------------------------
 
     public Drive(HardwareMap hardwareMap, Pose startPose) {
         follower = Constants.create(hardwareMap);

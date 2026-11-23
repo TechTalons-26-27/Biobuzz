@@ -6,30 +6,18 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.Heading;
-import org.firstinspires.ftc.teamcode.util.StepperServo;
+import org.firstinspires.ftc.teamcode.util.ServoMath;
 
-/**
- * Turret driven by a single 5-turn (1800 deg) servo in positional mode.
- * All angles are in radians.
- *
- * Turret angle 0 = pointing straight along the robot's forward (heading) axis,
- * positive = counter-clockwise. Servo position 0.5 corresponds to turret angle 0.
- */
 public class Turret {
     // ---------------- Placeholders: tune these ----------------
-    /** Teeth on the turret gear. */
     private static final double TURRET_TEETH = 100;
-    /** Teeth on the servo (driving) gear. */
     private static final double DRIVER_TEETH = 20;
-    /** Turret-angle offset (rad) added to the computed angle to correct mounting/zero error. */
+    // Turret-angle offset (rad) added to the computed angle to correct mounting/zero error.
     private static final double TURRET_ZERO_OFFSET = 0;
     // -----------------------------------------------------------
 
-    /** Servo gear turns per turret turn (> 1 since driver is smaller). */
     private static final double GEAR_RATIO = TURRET_TEETH / DRIVER_TEETH;
-    /** Full servo travel: 1800 degrees in radians (5 turns). */
     private static final double SERVO_RANGE = Math.toRadians(1800);
-    /** Max turret travel either side of center, limited by the servo's range. */
     private static final double TURRET_LIMIT = (SERVO_RANGE / 2) / GEAR_RATIO;
 
     private final Servo servo;
@@ -41,12 +29,7 @@ public class Turret {
         servo.setPosition(servoPosition);
     }
 
-    /**
-     * Aims the turret at the target.
-     *
-     * @param currentPose robot's current pose (heading in radians)
-     * @param targetPose  point to face
-     */
+
     public void run(Pose currentPose, Pose targetPose) {
         // Field-frame bearing to target, then make it relative to the robot's heading.
         double fieldAngle = Heading.calculateTh(currentPose, targetPose);
@@ -56,18 +39,17 @@ public class Turret {
 
         // Turret angle -> servo shaft angle; servo center (0.5) = turret angle 0.
         double servoAngle = turretAngle * GEAR_RATIO;
-        servoPosition = StepperServo.toPosition(servoAngle, SERVO_RANGE, -SERVO_RANGE / 2);
+        servoPosition = ServoMath.toPosition(servoAngle, SERVO_RANGE, -SERVO_RANGE / 2);
         servo.setPosition(servoPosition);
     }
 
-    /** Wraps to (-pi, pi]. */
     private static double wrap(double rad) {
         while (rad > Math.PI) rad -= 2 * Math.PI;
         while (rad <= -Math.PI) rad += 2 * Math.PI;
         return rad;
     }
 
-    /**
+    /*
      * If the turret can travel more than a full rotation, several angles point the same way;
      * pick the reachable one closest to the current angle to avoid unnecessary unwinding.
      */

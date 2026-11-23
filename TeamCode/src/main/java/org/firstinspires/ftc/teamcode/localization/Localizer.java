@@ -10,14 +10,13 @@ import org.firstinspires.ftc.teamcode.pedro.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.vision.Limelight;
 
 public class Localizer {
-    // Enable only after the Limelight/Pedro coordinate transform is calibrated (see Limelight.getNewFieldPose).
     private static final boolean ENABLE_VISION = false;
 
     private final Follower follower;
     private final ElapsedTime timer;
     private final KalmanFilter kalmanFilter;
     private Pose lastOdomPose;
-    private final Limelight limelight; // null when vision is disabled
+    private final Limelight limelight;
 
     public Localizer(HardwareMap hardwareMap, Pose startPose) {
         follower = Constants.create(hardwareMap);
@@ -43,7 +42,6 @@ public class Localizer {
         double dt = timer.seconds();
         timer.reset();
 
-        // Advance by the odometry pose change since last loop.
         Pose odomPose = follower.pose();
         kalmanFilter.predict(
                 odomPose.x() - lastOdomPose.x(),
@@ -55,7 +53,6 @@ public class Localizer {
 
         //TODO: TUNE LIMELIGHT VARIANCE
         if (limelight != null) {
-            // Returns null unless there is a fresh, new measurement.
             Pose visionPose = limelight.getNewFieldPose();
             if (visionPose != null) {
                 kalmanFilter.update(visionPose, 4.0, odomPose.heading());

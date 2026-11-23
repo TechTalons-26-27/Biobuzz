@@ -20,13 +20,11 @@ public class ManualOuttake {
         stageMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    // call once to start
     public void start() {
         timer.reset();
         state = State.SPIN_UP;
     }
 
-    // call every loop
     public void update() {
         switch (state) {
 
