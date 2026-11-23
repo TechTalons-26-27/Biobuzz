@@ -8,6 +8,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.localization.Localizer;
 import org.firstinspires.ftc.teamcode.subsystems.drive.Drive;
+import org.firstinspires.ftc.teamcode.subsystems.turret.Turret;
+import org.firstinspires.ftc.teamcode.util.Alliance;
+import org.firstinspires.ftc.teamcode.util.Cell;
 
 
 public class Robot {
@@ -16,10 +19,12 @@ public class Robot {
 //    Outtake outtake;
 //    Limelight limelight;
     Localizer localizer;
+    Turret turret;
 
     public void initSubsystems(HardwareMap hardwareMap, Pose startPose) {
         localizer = new Localizer(hardwareMap, startPose);
         drive = new Drive(hardwareMap, startPose);
+        turret = new Turret(hardwareMap);
 //        limelight = new Limelight(hardwareMap, 0);
 
         //intake = new Intake(hardwareMap);
@@ -65,6 +70,17 @@ public class Robot {
     public double track(double curTime, Pose targetPose) {
 //        localizer.run();
         return drive.track(drive.getPose(), targetPose, curTime);
+    }
+
+    public void turret(Pose targetPose) {
+        turret.run(drive.getPose(), targetPose);
+    }
+
+    /** Aims the turret at the closest cell of the given alliance only. Call every loop. */
+    public void turret(Alliance alliance) {
+        Pose pose = drive.getPose();
+        Cell target = Cell.closest(alliance, pose);
+        turret.run(pose, target.pose);
     }
 
     public void localize() {
