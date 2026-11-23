@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class outtakeLogic {
+public class OuttakeLogic {
 
     // ---------------- Constants ----------------
     private static final double TICKS_PER_REV = 28.0;

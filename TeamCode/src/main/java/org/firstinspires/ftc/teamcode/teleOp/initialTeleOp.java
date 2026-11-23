@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.util.PoseStorage;
 
 
 @TeleOp(name="kalman test")
-public class initialTeleOp extends OpMode {
+public class InitialTeleOp extends OpMode {
 
     Robot robot;
     double forward, lateral, rotate;

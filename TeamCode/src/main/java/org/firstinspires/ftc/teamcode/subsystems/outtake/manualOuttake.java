@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class manualOuttake {
+public class ManualOuttake {
 
     private DcMotorEx outtakeMotor, intakeMotor, stageMotor;
     private ElapsedTime timer = new ElapsedTime();

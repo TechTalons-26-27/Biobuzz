@@ -46,7 +46,7 @@ public class Drive {
                 follower.pose().heading()
         );
 
-        follower.manual(powers);
+        ManualDrive.driveOrHold(follower, powers);
         follower.update();
     }
 
@@ -72,33 +72,21 @@ public class Drive {
     }
 
     public double track(Pose currentPose, Pose targetPose, double curTime) {
-        double rotate = 0;
-
         double ch = currentPose.heading();
         double th = Heading.calculateTh(currentPose, targetPose);
 
-        error = th - ch;
-        error = Math.atan2(Math.sin(error), Math.cos(error));
+        error = Math.atan2(Math.sin(th - ch), Math.cos(th - ch));
+
+        double dT = curTime - lastTime;
+        double dTerm = (dT > 0) ? ((error - lastError) / dT) * kD : 0;
+
+        lastError = error;
+        lastTime = curTime;
+        this.curTime = curTime;
 
         if (Math.abs(error) < angleTolerance) {
-            rotate = 0;
-        } else {
-            double pTerm = error * kP;
-            this.curTime = curTime;
-
-            double dT = curTime - lastTime;
-
-            double dTerm = 0;
-
-            if (dT != 0) {
-                dTerm = ((error - lastError) / dT) * kD;
-            }
-
-            rotate = Range.clip(pTerm + dTerm, -0.7, 0.7);
-
-            lastError = error;
-            lastTime = curTime;
+            return 0;
         }
-        return rotate;
+        return Range.clip(error * kP + dTerm, -0.7, 0.7);
     }
 }
