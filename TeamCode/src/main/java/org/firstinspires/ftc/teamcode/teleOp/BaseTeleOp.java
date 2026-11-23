@@ -30,7 +30,7 @@ public abstract class BaseTeleOp extends OpMode {
         Pose startPose = PoseStorage.currentPose;
 
         robot = new Robot();
-        robot.initSubsystems(hardwareMap, startPose);
+        robot.initSubsystems(hardwareMap, startPose, alliance);
     }
 
 

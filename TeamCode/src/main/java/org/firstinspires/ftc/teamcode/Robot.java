@@ -24,12 +24,12 @@ public class Robot {
     Turret turret;
     Follower follower;
 
-    public void initSubsystems(HardwareMap hardwareMap, Pose startPose) {
+    public void initSubsystems(HardwareMap hardwareMap, Pose startPose, Alliance alliance) {
         follower = Constants.create(hardwareMap);
         follower.setPose(startPose);
 
         localizer = new Localizer(hardwareMap, follower, startPose);
-        drive = new Drive(follower);
+        drive = new Drive(follower, alliance.driverForwardHeading);
         turret = new Turret(hardwareMap);
 //        limelight = new Limelight(hardwareMap, 0);
 
@@ -76,11 +76,6 @@ public class Robot {
         return drive.track(drive.getPose(), targetPose, curTime);
     }
 
-    public void turret(Pose targetPose) {
-        turret.run(drive.getPose(), targetPose);
-    }
-
-    /** Aims the turret at the closest cell of the given alliance only. Call every loop. */
     public void turret(Alliance alliance) {
         Pose pose = drive.getPose();
         Cell target = Cell.closest(alliance, pose);

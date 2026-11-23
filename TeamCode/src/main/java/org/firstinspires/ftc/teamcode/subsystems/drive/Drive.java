@@ -22,9 +22,13 @@ public class Drive {
     double curTime = 0;
     double lastTime = 0;
 
-    
-    public Drive(Follower follower) {
+
+    // Field heading (rad) that "stick forward" maps to: 0 for red, PI for blue.
+    private final double driverForwardHeading;
+
+    public Drive(Follower follower, double driverForwardHeading) {
         this.follower = follower;
+        this.driverForwardHeading = driverForwardHeading;
     }
 
     public Pose getPose() {
@@ -36,7 +40,8 @@ public class Drive {
                 forward,
                 lateral,
                 rotate,
-                follower.pose().heading()
+                follower.pose().heading(),
+                driverForwardHeading
         );
 
         ManualDrive.driveOrHold(follower, powers);
