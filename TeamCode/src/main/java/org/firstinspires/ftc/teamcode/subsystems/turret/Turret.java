@@ -30,7 +30,7 @@ public class Turret {
     }
 
 
-    public void run(Pose currentPose, Pose targetPose) {
+    public void update(Pose currentPose, Pose targetPose) {
         // Field-frame bearing to target, then make it relative to the robot's heading.
         double fieldAngle = Heading.calculateTh(currentPose, targetPose);
         double relative = wrap(fieldAngle - currentPose.heading() + TURRET_ZERO_OFFSET);

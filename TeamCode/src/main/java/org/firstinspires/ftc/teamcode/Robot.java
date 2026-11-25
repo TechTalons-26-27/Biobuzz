@@ -29,7 +29,7 @@ public class Robot {
         follower.setPose(startPose);
 
         localizer = new Localizer(hardwareMap, follower, startPose);
-        drive = new Drive(follower, alliance.driverForwardHeading);
+        drive = new Drive(follower, alliance.offsetHeading);
         turret = new Turret(hardwareMap);
 //        limelight = new Limelight(hardwareMap, 0);
 
@@ -38,8 +38,8 @@ public class Robot {
     }
 
 
-    public void manualDrive(double forward, double lateral, double rotate) {
-        drive.run(forward, lateral, rotate);
+    public void drive(double forward, double lateral, double rotate) {
+        drive.update(forward, lateral, rotate);
     }
 
 
@@ -79,7 +79,7 @@ public class Robot {
     public void turret(Alliance alliance) {
         Pose pose = drive.getPose();
         Cell target = Cell.closest(alliance, pose);
-        turret.run(pose, target.pose);
+        turret.update(pose, target.pose);
     }
 
     public void localize() {

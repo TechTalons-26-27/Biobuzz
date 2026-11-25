@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.subsystems.outtake;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -27,7 +26,7 @@ public class Outtake {
         //outtake.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidfCoefficients);
     }
 
-    public void run(double outtakeTrigger) {
+    public void update(double outtakeTrigger) {
         if (outtakeTrigger > 0.2) {
             //outtake.setVelocity(targetVelocity);
             outtake.setPower(1);

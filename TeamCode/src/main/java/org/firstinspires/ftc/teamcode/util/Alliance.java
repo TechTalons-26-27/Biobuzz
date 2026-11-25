@@ -5,9 +5,9 @@ public enum Alliance {
     BLUE(Math.PI);
 
     /** Field heading (rad) the robot drives toward when the driver pushes the left stick forward. */
-    public final double driverForwardHeading;
+    public final double offsetHeading;
 
-    Alliance(double driverForwardHeading) {
-        this.driverForwardHeading = driverForwardHeading;
+    Alliance(double offsetHeading) {
+        this.offsetHeading = offsetHeading;
     }
 }

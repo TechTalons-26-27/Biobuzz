@@ -15,10 +15,10 @@ public class Intake {
         intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void run(boolean intakeButton) {
+    public void update(boolean intakeButton) {
         if (intakeButton) {
-            intake.setPower(1);
-            stage.setPower(0.2);
+            intake.setPower(0.5);
+            stage.setPower(0.5);
         } else {
             intake.setPower(0);
             stage.setPower(0);
@@ -26,7 +26,6 @@ public class Intake {
     }
 
     public void telemetry(Telemetry telemetry) {
-        telemetry.addData("Intake Power:", intake.getPower());
-        telemetry.addData("Stage Power:", stage.getPower());
+        telemetry.addData("Intake & Stage Power", intake.getPower());
     }
 }

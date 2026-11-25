@@ -50,7 +50,7 @@ public abstract class BaseTeleOp extends OpMode {
         lateral = -gamepad1.left_stick_x;
         rotate = -gamepad1.right_stick_x;
 
-        robot.manualDrive(forward, lateral, rotate);
+        robot.drive(forward, lateral, rotate);
 
         robot.turret(alliance);
 

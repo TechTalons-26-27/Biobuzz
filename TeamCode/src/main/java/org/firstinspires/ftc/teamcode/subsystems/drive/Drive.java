@@ -24,24 +24,24 @@ public class Drive {
 
 
     // Field heading (rad) that "stick forward" maps to: 0 for red, PI for blue.
-    private final double driverForwardHeading;
+    private final double offsetHeading;
 
-    public Drive(Follower follower, double driverForwardHeading) {
+    public Drive(Follower follower, double offsetHeading) {
         this.follower = follower;
-        this.driverForwardHeading = driverForwardHeading;
+        this.offsetHeading = offsetHeading;
     }
 
     public Pose getPose() {
         return follower.pose();
     }
 
-    public void run(double forward, double lateral, double rotate) {
+    public void update(double forward, double lateral, double rotate) {
         DrivePowers powers = ManualDrive.fieldCentric(
                 forward,
                 lateral,
                 rotate,
                 follower.pose().heading(),
-                driverForwardHeading
+                offsetHeading
         );
 
         ManualDrive.driveOrHold(follower, powers);
