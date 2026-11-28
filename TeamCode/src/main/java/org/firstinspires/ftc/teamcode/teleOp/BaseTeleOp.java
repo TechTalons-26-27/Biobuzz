@@ -54,6 +54,9 @@ public abstract class BaseTeleOp extends OpMode {
 
         robot.turret(alliance);
 
+        // Hold right trigger to shoot, hold left trigger to intake.
+        robot.score(gamepad1.right_trigger > 0.2, gamepad1.left_trigger > 0.2);
+
         robot.telemetry(telemetry);
     }
 }
