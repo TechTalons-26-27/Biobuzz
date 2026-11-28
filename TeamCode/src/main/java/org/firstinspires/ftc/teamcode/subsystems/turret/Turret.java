@@ -9,9 +9,8 @@ import org.firstinspires.ftc.teamcode.util.Heading;
 import org.firstinspires.ftc.teamcode.util.ServoMath;
 
 public class Turret {
-    // ---------------- Placeholders: tune these ----------------
-    private static final double TURRET_TEETH = 100;
-    private static final double DRIVER_TEETH = 20;
+    private static final double TURRET_TEETH = 95;
+    private static final double DRIVER_TEETH = 57;
     // Turret-angle offset (rad) added to the computed angle to correct mounting/zero error.
     private static final double TURRET_ZERO_OFFSET = 0;
     // -----------------------------------------------------------
