@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.util.HardwareNames;
 import org.firstinspires.ftc.teamcode.util.Heading;
 import org.firstinspires.ftc.teamcode.util.ServoMath;
 
@@ -24,7 +25,7 @@ public class Turret {
     private double servoPosition = 0.5;
 
     public Turret(HardwareMap hardwareMap) {
-        servo = hardwareMap.get(Servo.class, "turret");
+        servo = hardwareMap.get(Servo.class, HardwareNames.TURRET);
         servo.setPosition(servoPosition);
     }
 

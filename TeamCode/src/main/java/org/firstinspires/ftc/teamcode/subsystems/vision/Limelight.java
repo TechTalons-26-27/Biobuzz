@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.util.HardwareNames;
 
 public class Limelight {
 
@@ -18,7 +19,7 @@ public class Limelight {
 
     public Limelight(HardwareMap hardwareMap, int pipeline) {
 
-        limelight3A = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight3A = hardwareMap.get(Limelight3A.class, HardwareNames.LIMELIGHT);
 
         limelight3A.setPollRateHz(100);
         limelight3A.pipelineSwitch(pipeline);

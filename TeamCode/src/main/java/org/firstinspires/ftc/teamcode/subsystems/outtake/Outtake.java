@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.util.HardwareNames;
 
 /**
  * Flywheel only. Uses the hub's built-in velocity PIDF (RUN_USING_ENCODER + setVelocity),
@@ -30,7 +31,7 @@ public class Outtake {
     private double targetRPM = 0;
 
     public Outtake(HardwareMap hardwareMap) {
-        motor = hardwareMap.get(DcMotorEx.class, "outtake");
+        motor = hardwareMap.get(DcMotorEx.class, HardwareNames.OUTTAKE);
         motor.setDirection(DcMotor.Direction.REVERSE);
         // FLOAT so the flywheel coasts down instead of braking hard.
         motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);

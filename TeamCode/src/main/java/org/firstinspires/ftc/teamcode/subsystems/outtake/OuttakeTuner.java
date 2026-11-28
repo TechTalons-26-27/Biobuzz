@@ -5,8 +5,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
-@TeleOp(name = "Outtake PIDF Tuner (With Intake)")
-public class outtakeTuner extends OpMode {
+import org.firstinspires.ftc.teamcode.util.HardwareNames;
+
+@TeleOp(name = "Outtake PIDF Tuner (With Intake)", group = "Tuning")
+public class OuttakeTuner extends OpMode {
 
     // ---------------- Hardware ----------------
     private DcMotorEx outtake;
@@ -31,9 +33,9 @@ public class outtakeTuner extends OpMode {
 
     @Override
     public void init() {
-        outtake = hardwareMap.get(DcMotorEx.class, "outtake");
-        intake = hardwareMap.get(DcMotorEx.class, "intake");
-        stage = hardwareMap.get(DcMotorEx.class, "stage");
+        outtake = hardwareMap.get(DcMotorEx.class, HardwareNames.OUTTAKE);
+        intake = hardwareMap.get(DcMotorEx.class, HardwareNames.INTAKE);
+        stage = hardwareMap.get(DcMotorEx.class, HardwareNames.STAGE);
 
         outtake.setDirection(DcMotorEx.Direction.REVERSE);
         outtake.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
